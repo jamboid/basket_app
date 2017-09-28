@@ -45,6 +45,26 @@
 		"oAP": "\/build\/index.html",
 		"oF": 0
 		},
+	"\/src\/js\/App.apis.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/min\/App.apis-min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/App.events.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/min\/App.events-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/src\/js\/app.js": {
 		"ft": 64,
 		"ma": 0,
@@ -54,11 +74,41 @@
 		"oF": 2,
 		"sC": 3,
 		"tS": 0
+		},
+	"\/src\/js\/App.utils.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/min\/App.utils-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		}
 	},
 "hooks": [
 	],
 "manualImportLinks": {
+	"\/src\/js\/app.js": [
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.apis.js",
+			"position": 0,
+			"type": 1
+			},
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.events.js",
+			"position": 1,
+			"type": 1
+			},
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.utils.js",
+			"position": 2,
+			"type": 1
+			}
+		]
 	},
 "projectAttributes": {
 	"creationDate": 528297016,
@@ -1864,14 +1914,14 @@
 		"quality": 100
 		},
 	"languageDefaultsJS": {
-		"autoOutputAction": 0,
+		"autoOutputAction": 1,
 		"autoOutputPathFilenamePattern": "*-min.js",
 		"autoOutputPathRelativePath": "\/min",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 2,
 		"createSourceMap": 0,
-		"minifyOutput": 1,
+		"minifyOutput": 0,
 		"syntaxCheckerStyle": 3,
 		"transpilerStyle": 0
 		},
