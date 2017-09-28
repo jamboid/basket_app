@@ -1,2 +1,3 @@
-# basket_app
-Multi-currency check-out basket app
+# Basket App
+
+A multi-currency check-out basket web app.
