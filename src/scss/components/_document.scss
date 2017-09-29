@@ -1,0 +1,36 @@
+/* != Document */
+
+/* !== Universal Styles  */
+*, *:before, *:after {
+  // Border-Box Sizing
+  box-sizing: border-box;
+  // CSS Transition Display optimisation
+  //-webkit-transform-style: preserve-3d;
+  // Alternative fix
+  //-webkit-backface-visibility: hidden;
+}
+
+/* Rules for <html> and <body> go here */
+
+body {
+  background:$clrOffWhite;
+  color:$clrBlack;
+  font-size:100%;
+  font-family:$bodyfontfamily;
+  font-weight:$normal;
+  line-height:1.5;
+  color:$clrDarkGrey;
+}
+
+/*.js {
+  .st_App {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .pageLoaded {
+    .st_App {
+      opacity: 1;
+    }
+  }
+}*/

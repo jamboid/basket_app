@@ -1,6 +1,5 @@
 // App.events.js
-
-// Check if base namespace is defined so it isn't overwritten
+var App = App || {};
 
 // Create child namespace
 App.events = (function($) {

@@ -1,15 +1,26 @@
+var App = App || {};
+
 // App.apis.js
 
 App.apis = (function($) {
 
   const
 
-    handleError = function (response) {
-        return response.ok ? response : Promise.reject(response.statusText);
+    /**
+     * Check the status of the fetch response and return the response if okay,
+     * or handle the error if needed.
+     * @function
+     */
+    handleErrors = function (response) {
+      // If the response is not ok
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response;
     },
 
     /**
-     * Abstract function for GET Ajax call using fetch API
+     * This is an function to abstract a GET Ajax call, currently using the Fetch API
      * @function
      */
     get = function(endpoint) {
@@ -19,15 +30,22 @@ App.apis = (function($) {
             'Accept': 'application/json'
         })
       })
-      .then(handleError)
-      .catch( error => { throw new Error(error) });
+      // Handle any errors
+      .then(handleErrors)
+      // And if there are no errors, return the response
+      .then(function(response) {
+        return response;
+      });
     },
 
     /**
-     * Abstract function for POST Ajax call using fetch API
+     * This is an function stub to abstract a POST Ajax call
      * @function
      */
-    post = function(endpoint) {},
+    post = function(endpoint) {
+      App.utils.cl('Not implemented yet');
+      return null;
+    },
 
     init = function() {
       App.utils.cl("App.apis initialised");
@@ -37,6 +55,10 @@ App.apis = (function($) {
   // Return Module's Public API //
   ////////////////////////////////
 
-  return {init: init, get: get, post: post};
+  return {
+    init: init,
+    get: get,
+    post: post
+  };
 
 })(jQuery);

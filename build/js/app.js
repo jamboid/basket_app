@@ -24,42 +24,16 @@
 
 */
 
-
-/* !== Global Constants/Variables */
-
-const rateAPIKey = '65790386c71ca815956382ad28ed41c9',
-      rateDomain = 'http://apilayer.net/api/live',
-      rateEndPoint = '';
-
-//
-//
-// const App = {
-//   buildAppObjects: function () {
-//     let appBasket = new Basket();
-//     console.log(appBasket);
-//   },
-//
-//   init: function () {
-//     console.log('start...');
-//     this.buildAppObjects();
-//   }
-// }
-
-const App = {};
+var App = {};
 
 App.init = (function ($) {
-    "use strict";
-
-  ///////////////
-  // Polyfills //
-  ///////////////
 
   /////////////////////////////////
   // Initialise Modules //
   /////////////////////////////////
 
     // Modules object
-    const Modules = {};
+    var Modules = {};
 
     /**
      * Initialise the modules used in this app
@@ -68,24 +42,12 @@ App.init = (function ($) {
     Modules.init = function () {
       // When the DOM is ready, initialise the app modules using their init() functions
       $(document).ready(function () {
-        App.apis.init();
+
         App.events.init();
         App.utils.init();
-        console.log('app ready');
+        App.apis.init();
 
-        const testEndpoint = 'http://apilayer.net/api/live?access_key=65790386c71ca815956382ad28ed41c9&format=1';
-
-        let currency = 'USDAED';
-
-        let testGet = App.apis.get(testEndpoint)
-        .then(function(response){
-          return response.json();
-        })
-        .then(function(data) {
-          for (var key in data.quotes) {
-               console.log(key);
-          }
-        });
+        App.currencyconvertor.convertCurrencyFromPounds('foo','barr');
       });
     };
 
@@ -97,18 +59,56 @@ App.init = (function ($) {
 console.log('at the end');
 
 
+var App = App || {};
+
+App.config = (function() {
+
+  var
+
+  settings = {
+    'currencyAPI': {
+      'endpoint': 'http://apilayer.net/api/live?access_key=65790386c71ca815956382ad28ed41c9&format=1',
+      'rateAPIKey': '65790386c71ca815956382ad28ed41c9',
+      'rateDomain': 'http://apilayer.net/api/live',
+      'rateEndPoint': ''
+    }
+  }
+
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    settings:settings
+  };
+
+}());
+
+
+var App = App || {};
+
 // App.apis.js
 
 App.apis = (function($) {
 
   const
 
-    handleError = function (response) {
-        return response.ok ? response : Promise.reject(response.statusText);
+    /**
+     * Check the status of the fetch response and return the response if okay,
+     * or handle the error if needed.
+     * @function
+     */
+    handleErrors = function (response) {
+      // If the response is not ok
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response;
     },
 
     /**
-     * Abstract function for GET Ajax call using fetch API
+     * This is an function to abstract a GET Ajax call, currently using the Fetch API
      * @function
      */
     get = function(endpoint) {
@@ -118,15 +118,22 @@ App.apis = (function($) {
             'Accept': 'application/json'
         })
       })
-      .then(handleError)
-      .catch( error => { throw new Error(error) });
+      // Handle any errors
+      .then(handleErrors)
+      // And if there are no errors, return the response
+      .then(function(response) {
+        return response;
+      });
     },
 
     /**
-     * Abstract function for POST Ajax call using fetch API
+     * This is an function stub to abstract a POST Ajax call
      * @function
      */
-    post = function(endpoint) {},
+    post = function(endpoint) {
+      App.utils.cl('Not implemented yet');
+      return null;
+    },
 
     init = function() {
       App.utils.cl("App.apis initialised");
@@ -136,14 +143,17 @@ App.apis = (function($) {
   // Return Module's Public API //
   ////////////////////////////////
 
-  return {init: init, get: get, post: post};
+  return {
+    init: init,
+    get: get,
+    post: post
+  };
 
 })(jQuery);
 
 
 // App.events.js
-
-// Check if base namespace is defined so it isn't overwritten
+var App = App || {};
 
 // Create child namespace
 App.events = (function($) {
@@ -242,6 +252,7 @@ App.events = (function($) {
 
 
 // App.utils.js
+var App = App || {};
 
 App.utils = (function($) {
   "use strict";
@@ -403,5 +414,49 @@ App.utils = (function($) {
   };
 
 }(jQuery));
+
+
+var App = App || {};
+
+// Currency Convertor Module
+// This module is concerned with converting values passed to it by the UI components.
+App.currencyconvertor = (function () {
+
+  var
+
+  /**
+   * This function takes a monetary value and the target currency and return the correct conversion
+   * @function
+   */
+  convertCurrencyFromPounds = function(value,newCurrency) {
+    var testEndpoint = App.config.settings.currencyAPI.endpoint;
+
+    let testGet = App.apis.get(testEndpoint)
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(data) {
+      App.utils.cl(data);
+    });
+  },
+
+  /**
+   * This is the initialsation function for the module
+   * @function
+   */
+  init = function() {
+    // Init functions...
+  }
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    init:init,
+    convertCurrencyFromPounds:convertCurrencyFromPounds
+  }
+
+}())
 
 

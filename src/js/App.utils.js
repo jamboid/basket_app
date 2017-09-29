@@ -1,4 +1,5 @@
 // App.utils.js
+var App = App || {};
 
 App.utils = (function($) {
   "use strict";

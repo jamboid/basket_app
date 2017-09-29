@@ -24,42 +24,16 @@
 
 */
 
-
-/* !== Global Constants/Variables */
-
-const rateAPIKey = '65790386c71ca815956382ad28ed41c9',
-      rateDomain = 'http://apilayer.net/api/live',
-      rateEndPoint = '';
-
-//
-//
-// const App = {
-//   buildAppObjects: function () {
-//     let appBasket = new Basket();
-//     console.log(appBasket);
-//   },
-//
-//   init: function () {
-//     console.log('start...');
-//     this.buildAppObjects();
-//   }
-// }
-
-const App = {};
+var App = {};
 
 App.init = (function ($) {
-    "use strict";
-
-  ///////////////
-  // Polyfills //
-  ///////////////
 
   /////////////////////////////////
   // Initialise Modules //
   /////////////////////////////////
 
     // Modules object
-    const Modules = {};
+    var Modules = {};
 
     /**
      * Initialise the modules used in this app
@@ -68,24 +42,12 @@ App.init = (function ($) {
     Modules.init = function () {
       // When the DOM is ready, initialise the app modules using their init() functions
       $(document).ready(function () {
-        App.apis.init();
+
         App.events.init();
         App.utils.init();
-        console.log('app ready');
+        App.apis.init();
 
-        const testEndpoint = 'http://apilayer.net/api/live?access_key=65790386c71ca815956382ad28ed41c9&format=1';
-
-        let currency = 'USDAED';
-
-        let testGet = App.apis.get(testEndpoint)
-        .then(function(response){
-          return response.json();
-        })
-        .then(function(data) {
-          for (var key in data.quotes) {
-               console.log(key);
-          }
-        });
+        App.currencyconvertor.convertCurrencyFromPounds('foo','barr');
       });
     };
 

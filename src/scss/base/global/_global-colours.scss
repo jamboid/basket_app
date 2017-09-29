@@ -1,0 +1,54 @@
+/* != Framework - Global Colour Settings */
+
+// Variables and other settings that are used globally
+
+/*
+
+HOW TO USE COLOUR VARIABLES IN THIS SASS PROJECT
+------------------------------------------------
+
+There are a couple of options available to you:
+
+================
+1-STEP SYSTEM
+================
+
+1. Define your colour palette as a set of COLOUR-DESCRIPTIVE VARIABLES (e.g. $clrPaleBlue)
+2. Use these COLOUR-DESCRIPTIVE VARIABLES directly, throughout the project's other .scss files
+
+RESULT: Colours are presented in the code in a much more readable and meaningful format
+
+BEST FOR: Projects with one theme
+
+
+================
+2-STEP SYSTEM
+================
+
+1. Define your colour palette as a set of COLOUR-DESCRIPTIVE VARIABLES (e.g. $clrPaleBlue)
+2. Define a set of SEMANTIC-STRUCTURAL VARIABLES to use throughout your Sass files (e.g. $clrPageHeaderBackground)
+3. Set the SEMANTIC VARIABLES using the COLOUR-DESCRIPTIVE VARIABLES in this file only
+
+RESULT: Colours are managed in one location and colour changes will not require renaming variables throughout the set of Sass files
+
+BEST FOR: Projects that involve multiple themes or skins
+
+*/
+
+/* !== COLOUR-DESCRIPTIVE VARIABLES */
+$clrNone: none;
+$clrInvsibile: rgba(0,0,0,0);
+
+/* ! Black to White */
+$clrBlack: #000;
+$clrDarkGrey: #1C3D44;
+$clrGrey: #666;
+$clrLightGrey: #ccc;
+$clrPaleGrey: #E6E6E6;
+$clrVeryLightGrey: #EFF0F1;
+$clrDullWhite:#F2F2F2;
+$clrMoreOffWhite:#FCFCFC;
+$clrOffWhite: #F9FAFB;
+$clrWhite: #fff;
+
+$clrPrimary: $clrGrey;

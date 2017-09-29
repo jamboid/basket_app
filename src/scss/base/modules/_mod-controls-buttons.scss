@@ -1,0 +1,37 @@
+/* != Framework Module - BUTTONS */
+
+/* !== Basic Button Style */
+@mixin buttonBase {
+  display: inline-block;
+  font-family:$displayfontfamily;
+  font-size:17px;
+  padding:9px 30px 7px;
+  background:$clrPrimary;
+  color:$clrWhite;
+  border:1px solid $clrPrimary;
+  border-radius:0;
+  text-decoration: none;
+  transition:all $timeStandardLink;
+
+  &:hover, &:focus, &:active {
+    background:rgba($clrPrimary,0.05);
+    border-color:$clrPrimary;
+    color:$clrPrimary;
+  }
+}
+
+/* Placeholder for buttonBase @mixin */
+%buttonBase {
+  @include buttonBase;
+}
+
+/* Mixin for Basic Button Styles */
+@mixin basicButton($color, $background, $hoverColor: $color, $hoverBackground: darken($background, 12)) {
+  color:$color;
+  background:$background;
+
+  &:hover, &:focus, &:active {
+    color:$hoverColor;
+    background:$hoverBackground;
+  }
+}

@@ -39,12 +39,6 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/src\/index.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/build\/index.html",
-		"oF": 0
-		},
 	"\/src\/js\/App.apis.js": {
 		"ft": 64,
 		"ma": 0,
@@ -52,6 +46,26 @@
 		"oA": 1,
 		"oAP": "\/build\/js\/min\/App.apis-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/App.config.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/min\/App.config-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/App.currencyconvertor.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/min\/App.currencyconvertor-min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -65,13 +79,13 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/src\/js\/app.js": {
+	"\/src\/js\/App.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
 		"oA": 0,
-		"oAP": "\/build\/js\/app.js",
-		"oF": 2,
+		"oAP": "\/build\/js\/App.js",
+		"oF": 3,
 		"sC": 3,
 		"tS": 0
 		},
@@ -84,28 +98,397 @@
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
+		},
+	"\/src\/scss\/base\/_all.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_all.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/global\/_global-animation.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_global-animation.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/global\/_global-breakpoints.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_global-breakpoints.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/global\/_global-colours.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_global-colours.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/global\/_global-typography.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_global-typography.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-colours.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-colours.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-controls-buttons.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-controls-buttons.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-grid.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-grid.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-layout.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-layout.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-maths.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-maths.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-media-queries.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-media-queries.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-media.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-media.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-sprites.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-sprites.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-states.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-states.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-typography.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-typography.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/modules\/_mod-units.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_mod-units.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/resets\/_drupal-reset.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_drupal-reset.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/base\/resets\/_reset.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/base\/css\/_reset.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_atom-grid.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_atom-grid.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_atom-typography-headings.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_atom-typography-headings.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_atom-typography.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_atom-typography.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_cp_Basket.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_cp_Basket.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_cp_ProductList.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_cp_ProductList.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_document.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_document.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_ob_Button.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_ob_Button.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/components\/_st_App.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/build\/scss\/css\/_st_App.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/scss\/screen.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 5,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/build\/css\/screen.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/src\/templates\/index.kit": {
+		"ft": 2048,
+		"oA": 0,
+		"oAP": "\/build\/index.html",
+		"oF": 2
 		}
 	},
 "hooks": [
 	],
 "manualImportLinks": {
-	"\/src\/js\/app.js": [
+	"\/src\/js\/App.js": [
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.apis.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.config.js",
 			"position": 0,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.events.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.apis.js",
 			"position": 1,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.utils.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.events.js",
 			"position": 2,
+			"type": 1
+			},
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.utils.js",
+			"position": 3,
+			"type": 1
+			},
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/App.currencyconvertor.js",
+			"position": 4,
 			"type": 1
 			}
 		]
@@ -115,7 +498,7 @@
 	"displayValue": "Basket",
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-jake",
-	"lastBuiltDate": 528298179
+	"lastBuiltDate": 528376967
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

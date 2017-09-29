@@ -1,0 +1,40 @@
+/* != Fuzz Grid - Flexbox-based w/ legacy fallbacks */
+
+[class*=gd_] {
+  @include gridBase;
+}
+
+// Controls the layout of a list of Promo components
+.gd_Promos,
+.gd_List {
+  @include gridList;
+}
+
+// Simple row of elements
+.gd_Group {
+  @include gridRow;
+}
+
+.gd_NaturalGroup {
+  @include gridNaturalRow;
+}
+
+.gd_Fill {
+  @if $legacy == false {
+    align-items: stretch;
+  }
+}
+
+.gd_Natural {
+  @include gridNaturalAlignment;
+}
+
+.gd_Content {
+  @if $legacy == false {
+    @include gridCol;
+
+    &--last {
+      justify-content:flex-end;
+    }
+  }
+}

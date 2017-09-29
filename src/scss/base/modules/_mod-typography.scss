@@ -1,0 +1,21 @@
+/* ! Framework Module - TYPOGRAPHY */
+
+/*
+ * @mixins
+ */
+
+ /* !== Scaling Text */
+@mixin scalingText($startingSize,$breakpoint) {
+  font-size:(($startingSize / $breakpoint) * 100) + vw;
+}
+
+@mixin viewportScale($property,$startingSize,$breakpoint) {
+  $property:(($startingSize / $breakpoint) * 100) + vw;
+}
+
+/* !== Hide Text */
+@mixin hide-text{
+  overflow:hidden;
+  text-indent:-9999px;
+  display:block;
+}

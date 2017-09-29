@@ -1,0 +1,11 @@
+/* !== Component - Product List */
+
+.cp_ProductList {
+  flex:0 0 calc(100% - 400px);
+  padding-right: 40px;
+
+  &__item {
+    padding:20px;
+    border-bottom:1px solid $clrLightGrey;
+  }
+}

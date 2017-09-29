@@ -1,0 +1,12 @@
+/* !== Component - Basket */
+
+.cp_Basket {
+  flex:0 0 400px;
+
+  &__inner {
+    padding:30px;
+    border-radius:7px;
+    border:1px solid $clrLightGrey;
+    box-shadow:0 4px 7px $clrVeryLightGrey;
+  }
+}

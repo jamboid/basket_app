@@ -1,0 +1,50 @@
+/* != Atom - Typography - Headings */
+
+h1,
+.hd_Chewie {
+  font-size: 40px;
+  margin-bottom:em(18,40);
+}
+
+.hd_KayToo {
+  font-size:em(34);
+}
+
+.hd_Vader {
+  font-size:30px;
+  margin-bottom:em(18,30);
+}
+
+.hd_Han {
+  font-size:26px;
+  margin-bottom:em(10,26);
+}
+
+.hd_Luke {
+  font-size:20px;
+}
+
+h3 {
+  font-weight:bold;
+}
+
+
+/* !== Breakpoint */
+@include mq($bpHan) {
+  h1,
+  .hd_Chewie {
+    font-size: 32px;
+  }
+}
+
+/* !== Breakpoint */
+@include mq($bpLeia) {
+  h1,
+  .hd_Chewie {
+    font-size:26px;
+  }
+
+  .hd_Han {
+    font-size:20px;
+  }
+}

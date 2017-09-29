@@ -1,0 +1,20 @@
+/* != Object - Button */
+
+.ob_Button,
+.button {
+  @include buttonBase;
+}
+
+.ob_Button {
+  &--footer {
+    border-color:$clrGrey;
+    background:$clrGrey;
+    color:$clrWhite !important;
+
+
+    &:hover, &:focus, &:active {
+      color:$clrGrey !important;
+      text-decoration: none !important; 
+    }
+  }
+}

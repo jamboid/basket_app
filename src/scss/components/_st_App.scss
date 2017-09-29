@@ -1,0 +1,10 @@
+/* != Stage Container for App */
+
+.st_App {
+  padding:5%;
+
+  &__inner {
+    max-width:em(1000);
+    margin:0 auto;
+  }
+}
