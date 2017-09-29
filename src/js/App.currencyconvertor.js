@@ -15,7 +15,12 @@ App.currencyconvertor = (function () {
 
     let testGet = App.apis.get(testEndpoint)
     .then(function(response){
-      return response.json();
+      // Use Headers to check if the return object matches what we were looking for (e.g. json)
+      var contentType = response.headers.get("content-type");
+      if(contentType && contentType.includes("application/json")) {
+        return response.json();
+      }
+      throw new TypeError("Oops, we haven't got JSON!");
     })
     .then(function(data) {
       App.utils.cl(data);
