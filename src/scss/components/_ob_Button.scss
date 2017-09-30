@@ -1,20 +1,26 @@
 /* != Object - Button */
 
-.ob_Button,
-.button {
-  @include buttonBase;
-}
-
 .ob_Button {
-  &--footer {
-    border-color:$clrGrey;
-    background:$clrGrey;
-    color:$clrWhite !important;
+  @include buttonBase;
 
+  &--list {
+    font-size:16px;
+    padding:7px 10px 5px;
+  }
+
+  &--pos {
+    background-color:$clrBlue;
 
     &:hover, &:focus, &:active {
-      color:$clrGrey !important;
-      text-decoration: none !important; 
+      background-color:shade($clrBlue,15%);
+    }
+  }
+
+  &--neg {
+    background-color:$clrRed;
+
+    &:hover, &:focus, &:active {
+      background-color:shade($clrRed,15%);
     }
   }
 }

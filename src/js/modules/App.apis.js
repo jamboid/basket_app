@@ -1,6 +1,17 @@
 var App = App || {};
 
-// App.apis.js
+/*
+
+App.apis.js
+
+This module is responsible for sending and receiving Ajax call to remote APIs.
+It provides an abstracted GET Ajax function that other modules can call, returning
+a successfully received JSON object or handling any errors.
+
+The Ajax functionality is currently implemented using the Fetch API, but can be
+changed in the future without affecting function calls to it elsewhere in th app.
+
+*/
 
 App.apis = (function($) {
 
@@ -13,10 +24,14 @@ App.apis = (function($) {
      */
     handleErrors = function (response) {
       // If the response is not ok
-      if (!response.ok) {
-          throw Error(response.statusText);
+      if (response.ok) {
+        var contentType = response.headers.get("content-type");
+        if(contentType && contentType.includes("application/json")) {
+          return response.json();
+        }
+        throw new TypeError("Sorry, we haven't got JSON!");
       }
-      return response;
+      throw Error(response.statusText);
     },
 
     /**
@@ -27,14 +42,14 @@ App.apis = (function($) {
       return window.fetch(endpoint, {
         method: 'GET',
         headers: new Headers({
-            'Accept': 'application/json'
+          'Accept': 'application/json'
         })
       })
       // Handle any errors
       .then(handleErrors)
       // And if there are no errors, return the response
-      .then(function(response) {
-        return response;
+      .then(function(data) {
+        return data;
       });
     },
 

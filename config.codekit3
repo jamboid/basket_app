@@ -39,46 +39,6 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/src\/js\/App.apis.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/build\/js\/min\/App.apis-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/src\/js\/App.config.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/build\/js\/min\/App.config-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/src\/js\/App.currencyconvertor.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/build\/js\/min\/App.currencyconvertor-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/src\/js\/App.events.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/build\/js\/min\/App.events-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/src\/js\/App.js": {
 		"ft": 64,
 		"ma": 0,
@@ -89,12 +49,72 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/src\/js\/App.utils.js": {
+	"\/src\/js\/libs\/jquery.pubsub.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/build\/js\/min\/App.utils-min.js",
+		"oAP": "\/build\/js\/libs\/min\/jquery.pubsub-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/modules\/App.apis.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/modules\/min\/App.apis-min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/modules\/App.config.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/modules\/min\/App.config-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/modules\/App.events.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/modules\/min\/App.events-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/modules\/App.exchange.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/modules\/min\/App.exchange-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/modules\/App.model.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/modules\/min\/App.model-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/modules\/App.utils.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/modules\/min\/App.utils-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -463,32 +483,44 @@
 	"\/src\/js\/App.js": [
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.config.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/libs\/jquery.pubsub.js",
 			"position": 0,
-			"type": 1
+			"type": 0
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.apis.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.apis.js",
 			"position": 1,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.events.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.config.js",
 			"position": 2,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.utils.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.events.js",
 			"position": 3,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/App.currencyconvertor.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.exchange.js",
 			"position": 4,
+			"type": 1
+			},
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.model.js",
+			"position": 5,
+			"type": 1
+			},
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.utils.js",
+			"position": 6,
 			"type": 1
 			}
 		]
@@ -498,7 +530,7 @@
 	"displayValue": "Basket",
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-jake",
-	"lastBuiltDate": 528376967
+	"lastBuiltDate": 528501251
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

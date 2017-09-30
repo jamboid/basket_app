@@ -2,12 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Basket Checkout App</title> 
     <!-- Styles -->
-    <link rel="stylesheet" href="/css/screen.css">
+    <link rel="stylesheet" href="css/screen.css">
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/js/App.js" ></script>
+    <script type="text/javascript" src="js/App.js" ></script>
 
   </head>
   <body>
@@ -23,23 +26,23 @@
 
               <div class="cp_ProductList__item gd_Group">
                 <div class="cp_ProductList__itemInfo">
-                  <h3 class="cp_ProductList__itemName">Eggs</h3>
-                  <div class="cp_ProductList__itemQuantity">£1.60</div>
+                  <h3 class="cp_ProductList__itemName hd_Luke">Eggs</h3>
+                  <div class="cp_ProductList__itemQuantity">1 dozen</div>
                 </div>
-                <div class="cp_ProductList__itemPrice"></div>
+                <div class="cp_ProductList__itemPrice hd_Luke">£1.60</div>
                 <div class="cp_ProductList__itemActions">
-                  <a href="#" class="cp_ProductList__itemAdd">Add</a>
+                  <a href="#" class="cp_ProductList__itemAdd ob_Button--pos ob_Button--list ob_Button">Add</a>
                 </div>
               </div>
 
               <div class="cp_ProductList__item gd_Group">
                 <div class="cp_ProductList__itemInfo">
-                  <h3 class="cp_ProductList__itemName">Bread</h3>
-                  <div class="cp_ProductList__itemQuantity">£2.00</div>
+                  <h3 class="cp_ProductList__itemName hd_Luke">Bread</h3>
+                  <div class="cp_ProductList__itemQuantity">large loaf</div>
                 </div>
-                <div class="cp_ProductList__itemPrice"></div>
+                <div class="cp_ProductList__itemPrice hd_Luke">£2.00</div>
                 <div class="cp_ProductList__itemActions">
-                  <a href="#" class="cp_ProductList__itemAdd">Add</a>
+                  <a href="#" class="cp_ProductList__addAction ob_Button--pos ob_Button--list ob_Button">Add</a>
                 </div>
               </div>
 
@@ -52,6 +55,16 @@
             <div class="cp_Basket__inner">
               <header class="cp_Basket__header hd_Han">Your Basket</header>
               <section class="cp_Basket__list">
+                <div class="cp_Basket__item gd_Group">
+                  <div class="cp_ProductList__itemInfo">
+                    <div class="cp_Basket__itemName">Bread</div>
+                    <div class="cp_Basket__itemQuantity"></div>
+                  </div>
+                  <div class="cp_Basket__itemActions">
+                    <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button">Remove</a>
+                  </div>
+                </div>
+
                 <div class="cp_Basket__noItems">
                   <h3>Your basket has 0 items</h3>
                 </div>

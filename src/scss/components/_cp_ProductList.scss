@@ -4,8 +4,30 @@
   flex:0 0 calc(100% - 400px);
   padding-right: 40px;
 
+  /* !== List Item */
   &__item {
-    padding:20px;
+    padding:14px 0;
     border-bottom:1px solid $clrLightGrey;
+  }
+
+  &__itemInfo {
+    flex:1 1 auto;
+  }
+
+  &__itemName {
+    &:not(:last-child) {
+      margin-bottom:em(7,20);  
+    }
+  }
+
+  &__itemQuantity {
+    font-style: italic;
+    color:$clrLightGrey;
+  }
+
+  /* !== Actions */
+  &__itemActions {
+    flex-grow:0;
+    padding-left: 30px;
   }
 }

@@ -46,8 +46,15 @@ App.init = (function ($) {
         App.events.init();
         App.utils.init();
         App.apis.init();
+        App.exchange.init();
 
-        App.currencyconvertor.convertCurrencyFromPounds('foo','barr');
+        $.publish('rates/update');
+
+        
+        // var testGet = App.exchange.getExchangeRate('AUD')
+        // .then(function(response) {
+        //   App.utils.cl(response);
+        // });
       });
     };
 

@@ -4,19 +4,16 @@
 @mixin buttonBase {
   display: inline-block;
   font-family:$displayfontfamily;
-  font-size:17px;
-  padding:9px 30px 7px;
   background:$clrPrimary;
   color:$clrWhite;
-  border:1px solid $clrPrimary;
-  border-radius:0;
+  border:none;
+  border-radius:3px;
   text-decoration: none;
   transition:all $timeStandardLink;
+  line-height: 1;
 
   &:hover, &:focus, &:active {
-    background:rgba($clrPrimary,0.05);
-    border-color:$clrPrimary;
-    color:$clrPrimary;
+    color:$clrWhite;
   }
 }
 

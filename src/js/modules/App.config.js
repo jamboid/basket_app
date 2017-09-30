@@ -6,10 +6,9 @@ App.config = (function() {
 
   settings = {
     'currencyAPI': {
-      'endpoint': 'http://apilayer.net/api/live?access_key=65790386c71ca815956382ad28ed41c9&format=1',
+      'endpoint': 'http://apilayer.net/api/live?access_key=65790386c71ca815956382ad28ed41c9&format=1&currencies=USD,GBP,EUR,AUD,CAD',
       'rateAPIKey': '65790386c71ca815956382ad28ed41c9',
-      'rateDomain': 'http://apilayer.net/api/live',
-      'rateEndPoint': ''
+      'rateDomain': 'http://apilayer.net/api/live'
     }
   }
 
