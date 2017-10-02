@@ -47,14 +47,16 @@ App.init = (function ($) {
         App.utils.init();
         App.apis.init();
         App.exchange.init();
+        App.basket.init();
 
-        $.publish('rates/update');
+        //$.publish('rates/update');
 
-        
         // var testGet = App.exchange.getExchangeRate('AUD')
         // .then(function(response) {
-        //   App.utils.cl(response);
+        //   console.log(response);
         // });
+
+
       });
     };
 

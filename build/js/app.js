@@ -208,14 +208,16 @@ App.init = (function ($) {
         App.utils.init();
         App.apis.init();
         App.exchange.init();
+        App.basket.init();
 
-        $.publish('rates/update');
+        //$.publish('rates/update');
 
-        
         // var testGet = App.exchange.getExchangeRate('AUD')
         // .then(function(response) {
-        //   App.utils.cl(response);
+        //   console.log(response);
         // });
+
+
       });
     };
 
@@ -225,360 +227,6 @@ App.init = (function ($) {
 }(jQuery));
 
 console.log('at the end');
-
-
-var App = App || {};
-
-/*
-
-App.apis.js
-
-This module is responsible for sending and receiving Ajax call to remote APIs.
-It provides an abstracted GET Ajax function that other modules can call, returning
-a successfully received JSON object or handling any errors.
-
-The Ajax functionality is currently implemented using the Fetch API, but can be
-changed in the future without affecting function calls to it elsewhere in th app.
-
-*/
-
-App.apis = (function($) {
-
-  const
-
-    /**
-     * Check the status of the fetch response and return the response if okay,
-     * or handle the error if needed.
-     * @function
-     */
-    handleErrors = function (response) {
-      // If the response is not ok
-      if (response.ok) {
-        var contentType = response.headers.get("content-type");
-        if(contentType && contentType.includes("application/json")) {
-          return response.json();
-        }
-        throw new TypeError("Sorry, we haven't got JSON!");
-      }
-      throw Error(response.statusText);
-    },
-
-    /**
-     * This is an function to abstract a GET Ajax call, currently using the Fetch API
-     * @function
-     */
-    get = function(endpoint) {
-      return window.fetch(endpoint, {
-        method: 'GET',
-        headers: new Headers({
-          'Accept': 'application/json'
-        })
-      })
-      // Handle any errors
-      .then(handleErrors)
-      // And if there are no errors, return the response
-      .then(function(data) {
-        return data;
-      });
-    },
-
-    /**
-     * This is an function stub to abstract a POST Ajax call
-     * @function
-     */
-    post = function(endpoint) {
-      App.utils.cl('Not implemented yet');
-      return null;
-    },
-
-    init = function() {
-      App.utils.cl("App.apis initialised");
-    };
-
-  ////////////////////////////////
-  // Return Module's Public API //
-  ////////////////////////////////
-
-  return {
-    init: init,
-    get: get,
-    post: post
-  };
-
-})(jQuery);
-
-
-var App = App || {};
-
-App.config = (function() {
-
-  var
-
-  settings = {
-    'currencyAPI': {
-      'endpoint': 'http://apilayer.net/api/live?access_key=65790386c71ca815956382ad28ed41c9&format=1&currencies=USD,GBP,EUR,AUD,CAD',
-      'rateAPIKey': '65790386c71ca815956382ad28ed41c9',
-      'rateDomain': 'http://apilayer.net/api/live'
-    }
-  }
-
-
-  ////////////////////////////////
-  // Return Module's Public API //
-  ////////////////////////////////
-
-  return {
-    settings:settings
-  };
-
-}());
-
-
-// App.events.js
-var App = App || {};
-
-// Create child namespace
-App.events = (function($) {
-  "use strict";
-
-  ///////////////
-  // Variables //
-  ///////////////
-
-  var $body = $("body").eq(0),
-
-    ///////////////
-    // Functions //
-    ///////////////
-
-    /**
-     * Bind custom Global events that will result in a "Publish" message being broadcast
-     * @function
-     */
-    bindGlobalMessages = function() {
-
-      // Handle page scroll
-      // $(window).on("scroll", function() {
-      //   $.publish("page/scroll");
-      // });
-
-      // Handle debounced resize
-      // - requires the jquery.debouncedresize.js plugin
-      // $(window).on("debouncedresize", function() {
-      //   $.publish("page/resize");
-      // });
-
-      // Register Hammer touch events on body
-      // This lets you treat these touch events as the normal delegate events
-      // - CURRENTLY OVERKILL TO DO THIS - JUST BIND INDIVIDUAL COMPONENTS (e.g. See Carousel)
-      //$body.hammer();
-
-    },
-
-    /**
-     * Simple factory function to trigger a global message upon a delegated event
-     * - note that preventDefault is only called if the preventBubble parameter is false
-     * @function
-     * @parameter eventType (string) - the event type we're listening for
-     * @parameter selector (string) - the selector for the element event is triggered on
-     * @parameter message (string) - the message we want to publish
-     * @parameter preventBubble (boolean) - a boolean to control bubbling of the original event (true prevents the bubble, false allows it)
-     *
-     */
-    createGlobalMessenger = function(eventType, selector, message, preventBubble) {
-      $body.on(eventType, selector, function(e) {
-        if (preventBubble) {
-          e.preventDefault();
-        }
-
-        // The message is published with the event object (e) as attached data
-        $.publish(message, e);
-      });
-    },
-
-    /**
-     * Simple factory function to bind a common delegated event listener to the <body> element
-     * @function
-     * @parameter eventType (string) - the event type we're listening for
-     * @parameter selector (string) - the selector for the element event is triggered on
-     * @parameter eventToTrigger (string) - custom event we want to send back to target element
-     */
-    createDelegatedEventListener = function(eventType, selector, eventToTrigger) {
-      $body.on(eventType, selector, function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $(e.target).trigger(eventToTrigger);
-      });
-    },
-
-    /**
-     * Initialise this module
-     * @function
-     */
-    init = function() {
-      App.utils.cl("App.events initialised");
-      //bindGlobalMessages();
-    };
-
-  ////////////////////////////////
-  // Return Module's Public API //
-  ////////////////////////////////
-
-  return {
-    init: init,
-    delegate: createDelegatedEventListener,
-    global: createGlobalMessenger
-  };
-
-}(jQuery));
-
-
-var App = App || {};
-
-/*
-
-App.exchange.js
-
-This module maintains and provides accurate currency
-exchange information to the rest of the app.
-
-*/
-App.exchange = (function () {
-  var exchangeRates = {
-    'timeStamp': '',
-    'rates': {}
-  },
-
-  /**
-   * Returns the exchange rate for a given currency
-   * This will be based on
-   * @function
-   */
-  getExchangeRate = function(newCurrency) {
-    // If the exchangeRates object has been populated with data
-    // i.e. the timeStamp value has been set, return the rates
-    // for the given currency, otherwise return null.
-    if(exchangeRates.timeStamp !== '') {
-      return exchangeRates.rates[newCurrency];
-    } else {
-      return null;
-    }
-  },
-
-  /**
-   * Sets the new exchange rates.
-   * @function
-   */
-  setRates = function (newRates,baseCurrency) {
-    App.utils.cl(newRates);
-
-    /*
-    The free version of the currencylayer API used currently only provides exchange
-    rates against the US Dollar, so we need to cross calculate the exchange rates for
-    any other base currency (in this case the British Pound).
-    */
-
-    // Set rates in the exchangeRates.rates object
-    for (var key in newRates) {
-      if (newRates.hasOwnProperty(key)) {
-        // Calculate the exchange rate against the base currency
-        var rateAgainstBaseCurrency  = newRates[key] / newRates[baseCurrency];
-
-        // Set the calculated rate in the exchangeRates object
-        exchangeRates.rates[key] = rateAgainstBaseCurrency;
-      }
-    }
-
-    // Update the timeStamp for the rates
-    exchangeRates.timeStamp = new Date();
-
-    // Publish a message stating the rates have been updated
-    $.publish('rates/updated');
-
-    // Log the newly update exchangeRates object
-    App.utils.cl(exchangeRates);
-  },
-
-  getUpdatedCurrenctRates = function (newCurrency) {
-    App.utils.cl('update rates...');
-    var newRates = App.apis.get(App.config.settings.currencyAPI.endpoint)
-    .then(function(data) {
-      // Set updated exchange rates, against a base currency
-      setRates(data.quotes,'USDGBP');
-    });
-  },
-
-  /**
-   * Subscribe object to Global Messages
-   * @function
-   */
-  subscribeToMessages = function () {
-      // Subscrive to layoutchange event to trigger scroller's updateLayout method
-    $.subscribe("rates/update", function () {
-      getUpdatedCurrenctRates();
-    });
-  },
-
-  /**
-   * This is the initialsation function for the module
-   * @function
-   */
-  init = function() {
-    // Init functions...
-    subscribeToMessages();
-  }
-
-  ////////////////////////////////
-  // Return Module's Public API //
-  ////////////////////////////////
-
-  return {
-    init:init,
-    getExchangeRate:getExchangeRate,
-    setRates:setRates
-  }
-}())
-
-
-var App = App || {};
-
-/*
-
-App.model.js
-
-This module contains the working data used by the app, as well as specific Get/Set functions
-for accessing and updating it.
-
-*/
-App.model = (function () {
-  var exchangeRates,
-
-  setExchangeRates = function (newRates) {
-    exchangeRates = newRates;
-  },
-
-  getExchangeRate = function (currency) {
-
-  },
-
-  /**
-   * This is the initialsation function for the module
-   * @function
-   */
-  init = function() {
-    // Init functions...
-  }
-
-  ////////////////////////////////
-  // Return Module's Public API //
-  ////////////////////////////////
-
-  return {
-    init:init,
-    setExchangeRates:setExchangeRates,
-    getExchangeRate:getExchangeRate
-  }
-}())
 
 
 // App.utils.js
@@ -725,7 +373,7 @@ App.utils = (function($) {
      * @function
      */
     init = function() {
-      App.utils.cl("App.utils.init called");
+      console.log("App.utils.init called");
     };
 
   ////////////////////////////////
@@ -743,6 +391,628 @@ App.utils = (function($) {
     init: init
   };
 
+}(jQuery));
+
+
+var App = App || {};
+
+/*
+
+App.apis.js
+
+This module is responsible for sending and receiving Ajax call to remote APIs.
+It provides an abstracted GET Ajax function that other modules can call, returning
+a successfully received JSON object or handling any errors.
+
+The Ajax functionality is currently implemented using the Fetch API, but can be
+changed in the future without affecting function calls to it elsewhere in th app.
+
+*/
+
+App.apis = (function($) {
+
+  var
+
+    /**
+     * Check the status of the fetch response and return the response if okay,
+     * or handle the error if needed.
+     * @function
+     */
+    handleErrors = function (response) {
+      // If the response is not ok
+      if (response.ok) {
+        var contentType = response.headers.get("content-type");
+        if(contentType && contentType.includes("application/json")) {
+          return response.json();
+        }
+        throw new TypeError("Sorry, we haven't got JSON!");
+      }
+      throw Error(response.statusText);
+    },
+
+    /**
+     * This is an function to abstract a GET Ajax call to a JSON endpoint, currently using the Fetch API
+     * @function
+     */
+    get = function(endpoint) {
+      return window.fetch(endpoint, {
+        method: 'GET',
+        headers: new Headers({
+          'Accept': 'application/json'
+        })
+      })
+      // Handle any errors
+      .then(handleErrors)
+      // And if there are no errors, return the response
+      .then(function(data) {
+        return data;
+      });
+    },
+
+    /**
+     * This is an function stub to abstract a POST Ajax call
+     * @function
+     */
+    post = function(endpoint) {
+      console.log('Not implemented yet');
+      return null;
+    },
+
+    init = function() {
+      console.log("App.apis initialised");
+    };
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    init: init,
+    get: get,
+    post: post
+  };
+
+})(jQuery);
+
+
+var App = App || {};
+
+App.config = (function() {
+
+  var rateAPIKey = '65790386c71ca815956382ad28ed41c9',
+
+  settings = {
+    // Base currency used to create exchange rates, as API currently only provides exchange rates for USD
+    "baseCurrency":"USDGBP",
+    // Currencies supported by this app, including name and symbol for use in the app UI
+    "currencies": {
+      "USD":{
+        "name":"US Dollars",
+        "symbol":"$"
+      },
+      "EUR": {
+        "name":"Euros",
+        "symbol":"€"
+      },
+      "GBP": {
+        "name":"British Pounds",
+        "symbol":"£"
+      },
+      "CAD": {
+        "name":"Canadian Dollars",
+        "symbol":"$"
+      }
+    },
+
+    'currencyAPI': {
+      'endpoint': 'http://apilayer.net/api/live?access_key=' + rateAPIKey + '&format=1&currencies=USD,GBP,EUR,AUD,CAD'
+    },
+  }
+
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    settings:settings
+  };
+
+}());
+
+
+// App.events.js
+var App = App || {};
+
+// Create child namespace
+App.events = (function($) {
+  "use strict";
+
+  ///////////////
+  // Variables //
+  ///////////////
+
+  var $body,
+
+    ///////////////
+    // Functions //
+    ///////////////
+
+    /**
+     * Bind custom Global events that will result in a "Publish" message being broadcast
+     * @function
+     */
+    bindGlobalMessages = function() {
+
+      // Handle page scroll
+      // $(window).on("scroll", function() {
+      //   $.publish("page/scroll");
+      // });
+
+      // Handle debounced resize
+      // - requires the jquery.debouncedresize.js plugin
+      // $(window).on("debouncedresize", function() {
+      //   $.publish("page/resize");
+      // });
+
+      // Register Hammer touch events on body
+      // This lets you treat these touch events as the normal delegate events
+      // - CURRENTLY OVERKILL TO DO THIS - JUST BIND INDIVIDUAL COMPONENTS (e.g. See Carousel)
+      //$body.hammer();
+
+    },
+
+    /**
+     * Simple factory function to trigger a global message upon a delegated event
+     * - note that preventDefault is only called if the preventBubble parameter is false
+     * @function
+     * @parameter eventType (string) - the event type we're listening for
+     * @parameter selector (string) - the selector for the element event is triggered on
+     * @parameter message (string) - the message we want to publish
+     * @parameter preventBubble (boolean) - a boolean to control bubbling of the original event (true prevents the bubble, false allows it)
+     *
+     */
+    createGlobalMessenger = function(eventType, selector, message, preventBubble) {
+
+      $body.on(eventType, selector, function(e) {
+        if (preventBubble) {
+          e.preventDefault();
+        }
+
+        // The message is published with the event object (e) as attached data
+        $.publish(message, e);
+      });
+    },
+
+    /**
+     * Simple factory function to bind a common delegated event listener to the <body> element
+     * @function
+     * @parameter eventType (string) - the event type we're listening for
+     * @parameter selector (string) - the selector for the element event is triggered on
+     * @parameter eventToTrigger (string) - custom event we want to send back to target element
+     */
+    createDelegatedEventListener = function(eventType, selector, eventToTrigger) {
+      $body.on(eventType, selector, function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(e.target).trigger(eventToTrigger);
+      });
+    },
+
+    /**
+     * Initialise this module
+     * @function
+     */
+    init = function() {
+      console.log("App.events initialised");
+      //bindGlobalMessages();
+      $body = $('body').eq(0);
+    };
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    init: init,
+    delegate: createDelegatedEventListener,
+    global: createGlobalMessenger
+  };
+
+}(jQuery));
+
+
+var App = App || {};
+
+/*
+
+App.exchange.js
+
+This module maintains and provides accurate currency
+exchange information to the rest of the app.
+
+*/
+App.exchange = (function () {
+  var exchangeRates = {
+    'timeStamp': '',
+    'rates': {}
+  },
+
+  /**
+   * Returns the exchange rate for a given currency
+   * This will be based on
+   * @function
+   */
+  getExchangeRate = function(newCurrency) {
+    // If the exchangeRates object has been populated with data
+    // i.e. the timeStamp value has been set, return the rates
+    // for the given currency, otherwise return null.
+    if(exchangeRates.timeStamp !== '') {
+      return exchangeRates.rates[newCurrency];
+    } else {
+      return null;
+    }
+  },
+
+  /**
+   * Sets the new exchange rates.
+   * @function
+   */
+  setRates = function (newRates,baseCurrency) {
+    console.log(newRates);
+
+    /*
+    The free version of the currencylayer API used currently only provides exchange
+    rates against the US Dollar, so we need to cross calculate the exchange rates for
+    any other base currency (in this case the British Pound).
+    */
+
+    // Set rates in the exchangeRates.rates object
+    for (var key in newRates) {
+      if (newRates.hasOwnProperty(key)) {
+        // Calculate the exchange rate against the base currency
+        var rateAgainstBaseCurrency  = newRates[key] / newRates[baseCurrency];
+        // Set the calculated rate in the exchangeRates object
+        exchangeRates.rates[key] = rateAgainstBaseCurrency;
+      }
+    }
+
+    // Update the timeStamp for the rates
+    exchangeRates.timeStamp = new Date();
+
+    // Publish a message stating the rates have been updated
+    // This will let the other component subscribers know to update themselves
+    $.publish('rates/updated');
+
+    // Log the newly update exchangeRates object
+    console.log(exchangeRates);
+  },
+
+  /**
+   * Call the currency API, using the App.apis module, and update the rates data with the result
+   * @function
+   */
+  getUpdatedCurrenctRates = function (newCurrency) {
+    console.log('update rates...');
+    var newRates = App.apis.get(App.config.settings.currencyAPI.endpoint)
+    .then(function(data) {
+      // Set updated exchange rates, against a base currency
+      setRates(data.quotes, App.config.settings.baseCurrency);
+    });
+  },
+
+  /**
+   * Subscribe object to Global Messages
+   * @function
+   */
+  subscribeToMessages = function () {
+      // Subscrive to layoutchange event to trigger scroller's updateLayout method
+    $.subscribe("rates/update", function () {
+      getUpdatedCurrenctRates();
+    });
+  },
+
+  /**
+   * This is the initialsation function for the module
+   * @function
+   */
+  init = function() {
+    // Init functions...
+    subscribeToMessages();
+  }
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    init:init,
+    getExchangeRate:getExchangeRate,
+    setRates:setRates
+  }
+}())
+
+
+var App = App || {};
+
+/*
+
+App.model.js
+
+This module contains the working data used by the app, as well as specific Get/Set functions
+for accessing and updating it.
+
+*/
+App.model = (function () {
+  var exchangeRates,
+
+  setExchangeRates = function (newRates) {
+    exchangeRates = newRates;
+  },
+
+  getExchangeRate = function (currency) {
+
+  },
+
+  /*
+  A JSON object containing the data for the list of products for sale.
+  This creates a single source of data for the various UI elements in the app.
+  In a product version of the app, this would like be loaded remotely using the App.apis module
+  */
+  products = {
+    "1": {
+      "name":"Peas",
+      "quantity":"per bag",
+      "price":"0.95"
+    },
+    "2": {
+      "name":"Eggs",
+      "quantity":"per dozen",
+      "price":"2.10"
+    },
+    "3": {
+      "name":"Milk",
+      "quantity":"per bottle",
+      "price":"1.30"
+    },
+    "4": {
+      "name":"Beans",
+      "quantity":"per cab",
+      "price":"0.73"
+    }
+  },
+
+  getProductInfo = function (productID) {
+    return products[productID];
+  },
+
+  // Current Currency
+  currentCurrency = 'GBP',
+
+  // Set and Get functions for Current Currency
+  setCurrentCurrency = function (newCurrency) {
+    currentCurrency = newCurrency;
+    $.publish('currency/switched');
+  }
+
+  getCurrentCurrency = function () {
+    return currentCurrency;
+  }
+
+  /**
+   * This is the initialsation function for the module
+   * @function
+   */
+  init = function() {
+    // Init functions...
+  }
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    init:init,
+    setExchangeRates:setExchangeRates,
+    getExchangeRate:getExchangeRate,
+    getProductInfo:getProductInfo,
+    setCurrentCurrency:setCurrentCurrency,
+    getCurrentCurrency:getCurrentCurrency
+  }
+}())
+
+
+var App = App || {};
+
+/*
+
+App.basket.js
+
+This module controls the functionality and display of the app's basket component.
+
+*/
+App.basket = (function ($) {
+
+
+  var
+
+  // Selectors for DOM elements
+  selBasket = '[data-basket=component]',
+  selBasketItem = '[data-basket=basketItem]',
+  selBasketItemRemoveButton = '[data-basket-action=remove]',
+  selBasketCurrencySwitcher = 'select[data-basket=currency-switcher]',
+  selBasketCurrencySwitcherOption = '[data-basket=currency-switcher] option',
+
+
+  //////////////////
+  // Constructors //
+  //////////////////
+
+  /**
+   * BasketItem object constructor
+   * Each item added to the basket is controlled by an instance of this 'class'.
+   * @constructor
+   */
+  BasketItem = function (productID) {
+
+    var itemProductID = productID,
+    $thisBasketItem, // Variable to hold DOM element
+
+    /**
+     * Creates the item markup to add to the page
+     * @function
+     */
+    buildItemMarkup = function (productData) {
+      return `<div class="cp_Basket__item gd_Group">
+        <div class="cp_ProductList__itemInfo">
+          <div class="cp_Basket__itemName">${productData.name}</div>
+          <div class="cp_Basket__itemPrice">Price with prefix</div>
+        </div>
+        <div class="cp_Basket__itemActions">
+          <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button">Remove</a>
+        </div>
+      </div>
+      `
+    },
+
+    processProductInfo = function () {
+
+    },
+
+    /**
+     * Builds the item
+     * @function
+     */
+    buildItem = function () {
+
+      // Now that the list item has been created and added to the DOM we can bind custom message listeners to it.
+      bindCustomMessageEvents();
+      subscribeToEvents();
+    }
+
+    /**
+     * Bind Custom Events to allow Object messaging
+     * @function
+     */
+    bindCustomMessageEvents = function () {
+      $thisBasketItem.on('updatePrice', function(e) {
+        e.preventDefault();
+        console.log('updated price');
+      });
+      //
+      // $thisBasketItem.on('removeItem', function(e) {
+      //   e.preventDefault();
+      // });
+    },
+
+    /**
+     * Subscribe object to Global Messages
+     * @function
+     */
+    subscribeToEvents = function () {
+      // Subscrive to layoutchange event to trigger scroller's updateLayout method
+      $.subscribe("currency/switched", function () {
+        $(this).trigger("updatePrice");
+      } , $thisBasketItem);
+    };
+
+
+    this.init = function () {
+      buildItem();
+    };
+  },
+
+  /**
+   * Currency Switcher object constructor
+   * This object controls the functionality of the checkout basket's currency switcher menu
+   * @constructor
+   */
+  CurrencySwitcher = function (elem) {
+    var $thisCurrencySwitcher = $(elem),
+
+    /**
+     * Build the list of supported currencies using the data in the App's configuration settings
+     * @function
+     */
+    buildSwitcherMenu = function () {
+      var currencies = App.config.settings.currencies;
+      console.log(currencies);
+
+      for (var currency in currencies) {
+        var optionTemplate = '<option value="' + currency + '"> ' + currencies[currency].name + '</option>';
+        $thisCurrencySwitcher.append($(optionTemplate));
+      }
+    },
+
+    /**
+     * Bind Custom Events to allow Object messaging
+     * @function
+     */
+    bindCustomMessageEvents = function () {
+      $thisCurrencySwitcher.on('changeCurrency', function(e) {
+
+        e.preventDefault();
+        App.model.setCurrentCurrency($thisCurrencySwitcher.val());
+      });
+    },
+
+    /**
+     * Subscribe object to Global Messages
+     * @function
+     */
+    subscribeToEvents = function () {
+      // Subscrive to layoutchange event to trigger scroller's updateLayout method
+    };
+
+    this.init = function () {
+      // The base element for this UI component is already on the page, so we don't need to wait until after the
+      // options are added to the menu before setting up the related event listeners and message subscriptions.
+      bindCustomMessageEvents();
+      subscribeToEvents();
+
+      buildSwitcherMenu();
+    };
+  },
+
+  ///////////////
+  // Functions //
+  ///////////////
+
+  addItemToBasket = function (productID) {
+    var newBasketItem = new BasketItem(productID).init();
+  },
+
+  /**
+   * Create delegate event listeners for this module
+   * @function
+   */
+  delegateEvents = function () {
+    App.events.delegate("click", selBasketItemRemoveButton, "removeItem");
+    App.events.delegate("change", selBasketCurrencySwitcher, "changeCurrency");
+  },
+
+  /**
+   * This is the initialsation function for the module
+   * @function
+   */
+  init = function() {
+    // Init functions...
+    delegateEvents();
+
+    // Build basket components
+    $(selBasketCurrencySwitcher).each(function() {
+      var newCurrencySwitcher = new CurrencySwitcher(this).init();
+    });
+  }
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    init:init,
+    addItemToBasket:addItemToBasket
+  }
 }(jQuery));
 
 

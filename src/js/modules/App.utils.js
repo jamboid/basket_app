@@ -142,7 +142,7 @@ App.utils = (function($) {
      * @function
      */
     init = function() {
-      App.utils.cl("App.utils.init called");
+      console.log("App.utils.init called");
     };
 
   ////////////////////////////////

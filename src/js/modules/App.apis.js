@@ -15,7 +15,7 @@ changed in the future without affecting function calls to it elsewhere in th app
 
 App.apis = (function($) {
 
-  const
+  var
 
     /**
      * Check the status of the fetch response and return the response if okay,
@@ -35,7 +35,7 @@ App.apis = (function($) {
     },
 
     /**
-     * This is an function to abstract a GET Ajax call, currently using the Fetch API
+     * This is an function to abstract a GET Ajax call to a JSON endpoint, currently using the Fetch API
      * @function
      */
     get = function(endpoint) {
@@ -58,12 +58,12 @@ App.apis = (function($) {
      * @function
      */
     post = function(endpoint) {
-      App.utils.cl('Not implemented yet');
+      console.log('Not implemented yet');
       return null;
     },
 
     init = function() {
-      App.utils.cl("App.apis initialised");
+      console.log("App.apis initialised");
     };
 
   ////////////////////////////////

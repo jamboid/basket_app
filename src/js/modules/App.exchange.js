@@ -35,7 +35,7 @@ App.exchange = (function () {
    * @function
    */
   setRates = function (newRates,baseCurrency) {
-    App.utils.cl(newRates);
+    console.log(newRates);
 
     /*
     The free version of the currencylayer API used currently only provides exchange
@@ -48,7 +48,6 @@ App.exchange = (function () {
       if (newRates.hasOwnProperty(key)) {
         // Calculate the exchange rate against the base currency
         var rateAgainstBaseCurrency  = newRates[key] / newRates[baseCurrency];
-
         // Set the calculated rate in the exchangeRates object
         exchangeRates.rates[key] = rateAgainstBaseCurrency;
       }
@@ -58,18 +57,23 @@ App.exchange = (function () {
     exchangeRates.timeStamp = new Date();
 
     // Publish a message stating the rates have been updated
+    // This will let the other component subscribers know to update themselves
     $.publish('rates/updated');
 
     // Log the newly update exchangeRates object
-    App.utils.cl(exchangeRates);
+    console.log(exchangeRates);
   },
 
+  /**
+   * Call the currency API, using the App.apis module, and update the rates data with the result
+   * @function
+   */
   getUpdatedCurrenctRates = function (newCurrency) {
-    App.utils.cl('update rates...');
+    console.log('update rates...');
     var newRates = App.apis.get(App.config.settings.currencyAPI.endpoint)
     .then(function(data) {
       // Set updated exchange rates, against a base currency
-      setRates(data.quotes,'USDGBP');
+      setRates(data.quotes, App.config.settings.baseCurrency);
     });
   },
 

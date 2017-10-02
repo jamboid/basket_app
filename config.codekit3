@@ -39,7 +39,7 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/src\/js\/App.js": {
+	"\/src\/js\/app.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -66,6 +66,16 @@
 		"oA": 1,
 		"oAP": "\/build\/js\/modules\/min\/App.apis-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/src\/js\/modules\/App.basket.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/build\/js\/modules\/min\/App.basket-min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -480,7 +490,7 @@
 "hooks": [
 	],
 "manualImportLinks": {
-	"\/src\/js\/App.js": [
+	"\/src\/js\/app.js": [
 		{
 			"followForSyntaxChecking": 1,
 			"linkedFileAbbreviatedPath": "\/src\/js\/libs\/jquery.pubsub.js",
@@ -489,38 +499,44 @@
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.apis.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.utils.js",
 			"position": 1,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.config.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.apis.js",
 			"position": 2,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.events.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.config.js",
 			"position": 3,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.exchange.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.events.js",
 			"position": 4,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.model.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.exchange.js",
 			"position": 5,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.utils.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.model.js",
 			"position": 6,
+			"type": 1
+			},
+		{
+			"followForSyntaxChecking": 1,
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.basket.js",
+			"position": 7,
 			"type": 1
 			}
 		]

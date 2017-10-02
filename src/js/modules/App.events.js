@@ -9,7 +9,7 @@ App.events = (function($) {
   // Variables //
   ///////////////
 
-  var $body = $("body").eq(0),
+  var $body,
 
     ///////////////
     // Functions //
@@ -50,6 +50,7 @@ App.events = (function($) {
      *
      */
     createGlobalMessenger = function(eventType, selector, message, preventBubble) {
+
       $body.on(eventType, selector, function(e) {
         if (preventBubble) {
           e.preventDefault();
@@ -80,8 +81,9 @@ App.events = (function($) {
      * @function
      */
     init = function() {
-      App.utils.cl("App.events initialised");
+      console.log("App.events initialised");
       //bindGlobalMessages();
+      $body = $('body').eq(0);
     };
 
   ////////////////////////////////
