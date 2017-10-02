@@ -16,8 +16,12 @@
 
   &__itemName {
     &:not(:last-child) {
-      margin-bottom:em(7,20);  
+      margin-bottom:em(7,20);
     }
+  }
+
+  &__cost {
+    flex:0 0 80px;
   }
 
   &__itemQuantity {

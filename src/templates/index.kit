@@ -8,10 +8,6 @@
     <title>Basket Checkout App</title>
     <!-- Styles -->
     <link rel="stylesheet" href="css/screen.css">
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="js/App.js" ></script>
-
   </head>
   <body>
      <div class="st_App">
@@ -22,55 +18,24 @@
             <header class="cp_ProductList__header">
               <h2 class="cp_ProductList__title hd_Han">Products</h2>
             </header>
-            <section class="cp_ProductList__items">
-
-              <div class="cp_ProductList__item gd_Group">
-                <div class="cp_ProductList__itemInfo">
-                  <h3 class="cp_ProductList__itemName hd_Luke">Eggs</h3>
-                  <div class="cp_ProductList__itemQuantity">1 dozen</div>
-                </div>
-                <div class="cp_ProductList__itemPrice hd_Luke">£1.60</div>
-                <div class="cp_ProductList__itemActions">
-                  <a href="#" class="cp_ProductList__itemAdd ob_Button--pos ob_Button--list ob_Button">Add</a>
-                </div>
-              </div>
-
-              <div class="cp_ProductList__item gd_Group">
-                <div class="cp_ProductList__itemInfo">
-                  <h3 class="cp_ProductList__itemName hd_Luke">Bread</h3>
-                  <div class="cp_ProductList__itemQuantity">large loaf</div>
-                </div>
-                <div class="cp_ProductList__itemPrice hd_Luke">£2.00</div>
-                <div class="cp_ProductList__itemActions">
-                  <a href="#" class="cp_ProductList__addAction ob_Button--pos ob_Button--list ob_Button">Add</a>
-                </div>
-              </div>
+            <section class="cp_ProductList__items" data-product-list="items">
 
             </section>
           </div>
         </div>
 
         <!-- Basket -->
-          <div class="cp_Basket">
+          <div class="cp_Basket" data-basket="component">
             <div class="cp_Basket__inner">
               <header class="cp_Basket__header hd_Han">Your Basket</header>
-              <section class="cp_Basket__list">
-                <div class="cp_Basket__item gd_Group">
-                  <div class="cp_ProductList__itemInfo">
-                    <div class="cp_Basket__itemName">Bread</div>
-                    <div class="cp_Basket__itemQuantity"></div>
-                  </div>
-                  <div class="cp_Basket__itemActions">
-                    <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button" data-basket-action="remove">Remove</a>
-                  </div>
-                </div>
-
+              <section class="cp_Basket__list" data-basket="list">
                 <div class="cp_Basket__noItems">
                   <h3>Your basket has 0 items</h3>
                 </div>
               </section>
               <section class="cp_Basket__total"></section>
               <section class="cp_Basket__actions">
+                <a href="" class="cp_Basket__checkout ob_Button--progress ob_Button--primary ob_Button">Checkout</a>
                 <form class="cp_Basket__currSwitcher">
                   <h3 class="cp_Basket__currSwitcherTitle">Change currency</h3>
                   <select class="cp_Basket__currSwitcherMenu" name="" data-basket="currency-switcher"></select>
@@ -79,8 +44,12 @@
             </div>
           </div>
         <!-- Checkout -->
-
       </div>
      </div>
+
+     <!-- Scripts -->
+     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+     <script type="text/javascript" src="js/App.js" ></script>
+
   </body>
 </html>

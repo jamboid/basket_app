@@ -30,15 +30,15 @@ h3 {
 
 
 /* !== Breakpoint */
-@include mq($bpHan) {
+/*@include mq($bpHan) {
   h1,
   .hd_Chewie {
     font-size: 32px;
   }
-}
+}*/
 
 /* !== Breakpoint */
-@include mq($bpLeia) {
+/*@include mq($bpLeia) {
   h1,
   .hd_Chewie {
     font-size:26px;
@@ -47,4 +47,4 @@ h3 {
   .hd_Han {
     font-size:20px;
   }
-}
+}*/

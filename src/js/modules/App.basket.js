@@ -8,16 +8,18 @@ This module controls the functionality and display of the app's basket component
 
 */
 App.basket = (function ($) {
-
-
   var
 
   // Selectors for DOM elements
   selBasket = '[data-basket=component]',
+  selBasketList = '[data-basket=list]',
   selBasketItem = '[data-basket=basketItem]',
   selBasketItemRemoveButton = '[data-basket-action=remove]',
   selBasketCurrencySwitcher = 'select[data-basket=currency-switcher]',
   selBasketCurrencySwitcherOption = '[data-basket=currency-switcher] option',
+
+  // DOM elements
+  $basketList = $(selBasketList),
 
 
   //////////////////
@@ -32,34 +34,38 @@ App.basket = (function ($) {
   BasketItem = function (productID) {
 
     var itemProductID = productID,
+    productInfo,
     $thisBasketItem, // Variable to hold DOM element
 
     /**
      * Creates the item markup to add to the page
      * @function
      */
-    buildItemMarkup = function (productData) {
+    buildItemMarkup = function () {
       return `<div class="cp_Basket__item gd_Group">
         <div class="cp_ProductList__itemInfo">
-          <div class="cp_Basket__itemName">${productData.name}</div>
-          <div class="cp_Basket__itemPrice">Price with prefix</div>
+          <div class="cp_Basket__itemName">${productInfo.name}</div>
         </div>
+        <div class="cp_Basket__itemPrice">${productInfo.price}</div>
         <div class="cp_Basket__itemActions">
-          <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button">Remove</a>
+          <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button" data-basket-action="remove">Remove</a>
         </div>
       </div>
       `
     },
 
-    processProductInfo = function () {
-
-    },
-
     /**
-     * Builds the item
+     * Builds the item UI and add it to the page
      * @function
      */
     buildItem = function () {
+      //console.log('itemProductID', itemProductID);
+      // Set the productInfo variable by getting the product information from the App model
+      productInfo = App.model.getProductInfo(itemProductID);
+      // Build the Basket Item markup and set a variable to a jQuery object containing this structure
+      $thisBasketItem = $(buildItemMarkup());
+      // Append the new basket item to the DOM
+      $basketList.append($thisBasketItem);
 
       // Now that the list item has been created and added to the DOM we can bind custom message listeners to it.
       bindCustomMessageEvents();
@@ -73,12 +79,14 @@ App.basket = (function ($) {
     bindCustomMessageEvents = function () {
       $thisBasketItem.on('updatePrice', function(e) {
         e.preventDefault();
-        console.log('updated price');
+        //console.log('updated price');
       });
       //
-      // $thisBasketItem.on('removeItem', function(e) {
-      //   e.preventDefault();
-      // });
+      $thisBasketItem.on('removeItem', function(e) {
+        e.preventDefault();
+        console.log('remove item');
+        $thisBasketItem.remove();
+      });
     },
 
     /**
@@ -112,7 +120,7 @@ App.basket = (function ($) {
      */
     buildSwitcherMenu = function () {
       var currencies = App.config.settings.currencies;
-      console.log(currencies);
+      //console.log(currencies);
 
       for (var currency in currencies) {
         var optionTemplate = '<option value="' + currency + '"> ' + currencies[currency].name + '</option>';
@@ -129,6 +137,8 @@ App.basket = (function ($) {
 
         e.preventDefault();
         App.model.setCurrentCurrency($thisCurrencySwitcher.val());
+
+        console.log(App.model.getCurrentCurrency());
       });
     },
 
@@ -154,9 +164,16 @@ App.basket = (function ($) {
   // Functions //
   ///////////////
 
+  /**
+   * Build a basket item based on a productID and add it to the basket
+   * @function
+   */
   addItemToBasket = function (productID) {
     var newBasketItem = new BasketItem(productID).init();
   },
+
+
+
 
   /**
    * Create delegate event listeners for this module

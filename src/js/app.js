@@ -44,16 +44,16 @@ App.init = (function ($) {
       $(document).ready(function () {
 
         App.events.init();
-        App.utils.init();
         App.apis.init();
         App.exchange.init();
+        App.productList.init();
         App.basket.init();
 
         //$.publish('rates/update');
 
         // var testGet = App.exchange.getExchangeRate('AUD')
         // .then(function(response) {
-        //   console.log(response);
+        //   //console.log(response);
         // });
 
 
@@ -65,4 +65,4 @@ App.init = (function ($) {
 
 }(jQuery));
 
-console.log('at the end');
+//console.log('at the end');

@@ -205,16 +205,16 @@ App.init = (function ($) {
       $(document).ready(function () {
 
         App.events.init();
-        App.utils.init();
         App.apis.init();
         App.exchange.init();
+        App.productList.init();
         App.basket.init();
 
         //$.publish('rates/update');
 
         // var testGet = App.exchange.getExchangeRate('AUD')
         // .then(function(response) {
-        //   console.log(response);
+        //   //console.log(response);
         // });
 
 
@@ -226,172 +226,7 @@ App.init = (function ($) {
 
 }(jQuery));
 
-console.log('at the end');
-
-
-// App.utils.js
-var App = App || {};
-
-App.utils = (function($) {
-  "use strict";
-
-  ///////////////
-  // Variables //
-  ///////////////
-
-  const debugMode = true,
-
-    ///////////////
-    // Functions //
-    ///////////////
-
-    /**
-     * Console.log function with check for browsers that don't support it
-     * @function
-     */
-    logMessage = function(logMessage) {
-      if (debugMode === true) {
-        if (typeof window.console !== 'undefined') {
-          if (typeof window.console.log !== 'undefined') {
-            window.console.log(logMessage);
-          }
-        }
-      }
-    },
-
-    /**
-     * Get maximum height of a set of elements
-     * @function
-     */
-    getMaxHeight = function(elements) {
-      var theseElements = elements,
-        maxHeight = 0,
-        currentHeight = 0;
-      $(theseElements).css('min-height', "");
-      $(theseElements).each(function() {
-        currentHeight = $(this).height();
-        if (currentHeight > maxHeight) {
-          maxHeight = currentHeight;
-        }
-      });
-      return maxHeight;
-    },
-
-    /**
-     * Equalise the minimum heights of a set of elements
-     * @function
-     */
-    equaliseMinHeights = function(elements) {
-      var theseElements = elements,
-        maxHeight = getMaxHeight(theseElements);
-
-      getMaxHeight(theseElements);
-      $(theseElements).css('min-height', maxHeight);
-    },
-
-    /**
-         * Check if placeholder attribute is supported
-         * @function
-         */
-    //        DEPRECATED - USE MODERNIZR TEST INSTEAD
-    //         placeholderIsSupported = function () {
-    //           var test = document.createElement('input');
-    //           return ('placeholder' in test);
-    //         },
-
-    /**
-     * Read a page's GET URL query string variables and return them as an associative array.
-     * @function
-     */
-    getURLQueryString = function() {
-      var vars = [],
-        hash;
-      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-      for (var i = 0; i < hashes.length; i++) {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-      }
-      return vars;
-    },
-
-    /**
-     * Convert any encoded characters in a string to their unencoded versions
-     * - e.g. &amp to &
-     * @function
-     */
-    decodeCharacters = function(text) {
-      var elem = document.createElement('textarea');
-      elem.innerHTML = text;
-      return elem.value;
-    },
-
-    /**
-     * Check if element is currently displayed in the viewport - returns bool
-     * @function
-     */
-    isElementInView = function(element) {
-      var $element = $(element),
-        $window = $(window),
-        windowHeight = $window.height(),
-        scrollTop = $window.scrollTop(),
-        elementOffset = $element.offset(),
-        elementTop = elementOffset.top,
-        elementHeight = $element.outerHeight(),
-        elementBottom = elementTop + elementHeight,
-        screenBottom = scrollTop + windowHeight;
-
-      if (elementTop < screenBottom && elementBottom > scrollTop) {
-        return true;
-      } else if (elementBottom > scrollTop && elementBottom < screenBottom) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-
-    /**
-     * Remove the style attribute from an element
-     * @function
-     */
-    resetStyles = function(element) {
-      $(element).removeAttr("style");
-    },
-
-    /**
-     * Add "odd" and "even" classes
-     * @function
-     */
-    addOddAndEvenClasses = function(elements) {
-      var $theseElements = $(elements);
-      $theseElements.filter(':nth-child(2n-1)').addClass('odd');
-      $theseElements.filter(':nth-child(2n)').addClass('even');
-    },
-
-    /**
-     * Initialise this module
-     * @function
-     */
-    init = function() {
-      console.log("App.utils.init called");
-    };
-
-  ////////////////////////////////
-  // Return Module's Public API //
-  ////////////////////////////////
-
-  return {
-    cl: logMessage,
-    rs: resetStyles,
-    equaliseMinHeights: equaliseMinHeights,
-    getURLQueryString: getURLQueryString,
-    isElementInView: isElementInView,
-    addOddAndEvenClasses: addOddAndEvenClasses,
-    decode: decodeCharacters,
-    init: init
-  };
-
-}(jQuery));
+//console.log('at the end');
 
 
 var App = App || {};
@@ -454,12 +289,12 @@ App.apis = (function($) {
      * @function
      */
     post = function(endpoint) {
-      console.log('Not implemented yet');
+      //console.log('Not implemented yet');
       return null;
     },
 
     init = function() {
-      console.log("App.apis initialised");
+      //console.log("App.apis initialised");
     };
 
   ////////////////////////////////
@@ -604,7 +439,7 @@ App.events = (function($) {
      * @function
      */
     init = function() {
-      console.log("App.events initialised");
+      //console.log("App.events initialised");
       //bindGlobalMessages();
       $body = $('body').eq(0);
     };
@@ -659,7 +494,7 @@ App.exchange = (function () {
    * @function
    */
   setRates = function (newRates,baseCurrency) {
-    console.log(newRates);
+    //console.log(newRates);
 
     /*
     The free version of the currencylayer API used currently only provides exchange
@@ -685,15 +520,15 @@ App.exchange = (function () {
     $.publish('rates/updated');
 
     // Log the newly update exchangeRates object
-    console.log(exchangeRates);
+    //console.log(exchangeRates);
   },
 
   /**
    * Call the currency API, using the App.apis module, and update the rates data with the result
    * @function
    */
-  getUpdatedCurrenctRates = function (newCurrency) {
-    console.log('update rates...');
+  getUpdatedCurrencyRates = function (newCurrency) {
+    //console.log('update rates...');
     var newRates = App.apis.get(App.config.settings.currencyAPI.endpoint)
     .then(function(data) {
       // Set updated exchange rates, against a base currency
@@ -708,7 +543,7 @@ App.exchange = (function () {
   subscribeToMessages = function () {
       // Subscrive to layoutchange event to trigger scroller's updateLayout method
     $.subscribe("rates/update", function () {
-      getUpdatedCurrenctRates();
+      getUpdatedCurrencyRates();
     });
   },
 
@@ -786,6 +621,10 @@ App.model = (function () {
     return products[productID];
   },
 
+  getProducts = function() {
+    return products;
+  },
+
   // Current Currency
   currentCurrency = 'GBP',
 
@@ -816,10 +655,147 @@ App.model = (function () {
     setExchangeRates:setExchangeRates,
     getExchangeRate:getExchangeRate,
     getProductInfo:getProductInfo,
+    getProducts:getProducts,
     setCurrentCurrency:setCurrentCurrency,
     getCurrentCurrency:getCurrentCurrency
   }
 }())
+
+
+var App = App || {};
+
+/*
+
+App.productList.js
+
+This module controls the functionality and display of the app's basket component.
+
+*/
+App.productList = (function ($) {
+  var
+
+  // Selectors for DOM elements
+  selProductListItemAddButton = '[data-product-action=add]',
+
+  // DOM elements
+  $productListContainer = $('[data-product-list=items]'),
+
+  //////////////////
+  // Constructors //
+  //////////////////
+
+  /**
+   * ProductListItem object constructor
+   * Each item in the product list is controlled by an instance of this 'class'.
+   * @constructor
+   */
+  ProductListItem = function (productID) {
+    var thisProductID = productID,
+        $thisProductListItem,
+        productInfo,
+        productListItemTemplate,
+
+
+    buildProductListItemMarkup = function () {
+      return `
+      <div class="cp_ProductList__item gd_Group" data-product-id="${productInfo}">
+        <div class="cp_ProductList__itemInfo">
+          <h3 class="cp_ProductList__itemName hd_Luke">${productInfo.name}</h3>
+        </div>
+        <div class="cp_ProductList__cost">
+          <div class="cp_ProductList__itemPrice hd_Luke">£${productInfo.price}</div>
+          <div class="cp_ProductList__itemQuantity">${productInfo.quantity}</div>
+        </div>
+        <div class="cp_ProductList__itemActions">
+          <a href="#" class="cp_ProductList__itemAdd ob_Button--pos ob_Button--list ob_Button" data-product-action="add">Add</a>
+        </div>
+      </div>`
+    },
+
+    /**
+     * Builds the item
+     * @function
+     */
+    buildProductListItem = function () {
+      // Set the productInfo variable by getting the product information from the App model
+      productInfo = App.model.getProductInfo(thisProductID);
+      //console.log(thisProductID);
+      // Build the Basket Item markup and set a variable to a jQuery object containing this structure
+      $thisProductListItem = $(buildProductListItemMarkup());
+      // Append the new basket item to the DOM
+      $productListContainer.append($thisProductListItem);
+
+      // Now that the list item has been created and added to the DOM we can bind custom message listeners to it.
+      bindCustomMessageEvents();
+    }
+
+    /**
+     * Bind Custom Events to allow Object messaging
+     * @function
+     */
+    bindCustomMessageEvents = function () {
+      $thisProductListItem.on('addItemToBasket', function(e) {
+        e.preventDefault();
+        App.basket.addItemToBasket(thisProductID);
+      });
+      //
+      // $thisBasketItem.on('removeItem', function(e) {
+      //   e.preventDefault();
+      // });
+    };
+
+    this.init = function () {
+      //console.log('ProductListItem initialised');
+      buildProductListItem();
+    };
+  },
+
+
+
+  ///////////////
+  // Functions //
+  ///////////////
+
+
+  /**
+   * Build the product list from the data in the App model
+   * @function
+   */
+  buildProductList = function () {
+    var products  = App.model.getProducts();
+    //console.log('products', products);
+
+    for (var product in products) {
+      var productObj = new ProductListItem(product).init();
+    }
+  },
+
+  /**
+   * Create delegate event listeners for this module
+   * @function
+   */
+  delegateEvents = function () {
+    App.events.delegate("click", selProductListItemAddButton, "addItemToBasket");
+  },
+
+  /**
+   * This is the initialsation function for the module
+   * @function
+   */
+  init = function() {
+    // Init functions...
+    delegateEvents();
+    buildProductList();
+  }
+
+  ////////////////////////////////
+  // Return Module's Public API //
+  ////////////////////////////////
+
+  return {
+    init:init
+  }
+}(jQuery));
 
 
 var App = App || {};
@@ -832,16 +808,18 @@ This module controls the functionality and display of the app's basket component
 
 */
 App.basket = (function ($) {
-
-
   var
 
   // Selectors for DOM elements
   selBasket = '[data-basket=component]',
+  selBasketList = '[data-basket=list]',
   selBasketItem = '[data-basket=basketItem]',
   selBasketItemRemoveButton = '[data-basket-action=remove]',
   selBasketCurrencySwitcher = 'select[data-basket=currency-switcher]',
   selBasketCurrencySwitcherOption = '[data-basket=currency-switcher] option',
+
+  // DOM elements
+  $basketList = $(selBasketList),
 
 
   //////////////////
@@ -856,34 +834,38 @@ App.basket = (function ($) {
   BasketItem = function (productID) {
 
     var itemProductID = productID,
+    productInfo,
     $thisBasketItem, // Variable to hold DOM element
 
     /**
      * Creates the item markup to add to the page
      * @function
      */
-    buildItemMarkup = function (productData) {
+    buildItemMarkup = function () {
       return `<div class="cp_Basket__item gd_Group">
         <div class="cp_ProductList__itemInfo">
-          <div class="cp_Basket__itemName">${productData.name}</div>
-          <div class="cp_Basket__itemPrice">Price with prefix</div>
+          <div class="cp_Basket__itemName">${productInfo.name}</div>
         </div>
+        <div class="cp_Basket__itemPrice">${productInfo.price}</div>
         <div class="cp_Basket__itemActions">
-          <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button">Remove</a>
+          <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button" data-basket-action="remove">Remove</a>
         </div>
       </div>
       `
     },
 
-    processProductInfo = function () {
-
-    },
-
     /**
-     * Builds the item
+     * Builds the item UI and add it to the page
      * @function
      */
     buildItem = function () {
+      //console.log('itemProductID', itemProductID);
+      // Set the productInfo variable by getting the product information from the App model
+      productInfo = App.model.getProductInfo(itemProductID);
+      // Build the Basket Item markup and set a variable to a jQuery object containing this structure
+      $thisBasketItem = $(buildItemMarkup());
+      // Append the new basket item to the DOM
+      $basketList.append($thisBasketItem);
 
       // Now that the list item has been created and added to the DOM we can bind custom message listeners to it.
       bindCustomMessageEvents();
@@ -897,12 +879,14 @@ App.basket = (function ($) {
     bindCustomMessageEvents = function () {
       $thisBasketItem.on('updatePrice', function(e) {
         e.preventDefault();
-        console.log('updated price');
+        //console.log('updated price');
       });
       //
-      // $thisBasketItem.on('removeItem', function(e) {
-      //   e.preventDefault();
-      // });
+      $thisBasketItem.on('removeItem', function(e) {
+        e.preventDefault();
+        console.log('remove item');
+        $thisBasketItem.remove();
+      });
     },
 
     /**
@@ -936,7 +920,7 @@ App.basket = (function ($) {
      */
     buildSwitcherMenu = function () {
       var currencies = App.config.settings.currencies;
-      console.log(currencies);
+      //console.log(currencies);
 
       for (var currency in currencies) {
         var optionTemplate = '<option value="' + currency + '"> ' + currencies[currency].name + '</option>';
@@ -953,6 +937,8 @@ App.basket = (function ($) {
 
         e.preventDefault();
         App.model.setCurrentCurrency($thisCurrencySwitcher.val());
+
+        console.log(App.model.getCurrentCurrency());
       });
     },
 
@@ -978,9 +964,16 @@ App.basket = (function ($) {
   // Functions //
   ///////////////
 
+  /**
+   * Build a basket item based on a productID and add it to the basket
+   * @function
+   */
   addItemToBasket = function (productID) {
     var newBasketItem = new BasketItem(productID).init();
   },
+
+
+
 
   /**
    * Create delegate event listeners for this module

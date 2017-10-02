@@ -58,12 +58,12 @@ App.apis = (function($) {
      * @function
      */
     post = function(endpoint) {
-      console.log('Not implemented yet');
+      //console.log('Not implemented yet');
       return null;
     },
 
     init = function() {
-      console.log("App.apis initialised");
+      //console.log("App.apis initialised");
     };
 
   ////////////////////////////////

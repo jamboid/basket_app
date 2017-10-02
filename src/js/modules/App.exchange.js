@@ -35,7 +35,7 @@ App.exchange = (function () {
    * @function
    */
   setRates = function (newRates,baseCurrency) {
-    console.log(newRates);
+    //console.log(newRates);
 
     /*
     The free version of the currencylayer API used currently only provides exchange
@@ -61,15 +61,15 @@ App.exchange = (function () {
     $.publish('rates/updated');
 
     // Log the newly update exchangeRates object
-    console.log(exchangeRates);
+    //console.log(exchangeRates);
   },
 
   /**
    * Call the currency API, using the App.apis module, and update the rates data with the result
    * @function
    */
-  getUpdatedCurrenctRates = function (newCurrency) {
-    console.log('update rates...');
+  getUpdatedCurrencyRates = function (newCurrency) {
+    //console.log('update rates...');
     var newRates = App.apis.get(App.config.settings.currencyAPI.endpoint)
     .then(function(data) {
       // Set updated exchange rates, against a base currency
@@ -84,7 +84,7 @@ App.exchange = (function () {
   subscribeToMessages = function () {
       // Subscrive to layoutchange event to trigger scroller's updateLayout method
     $.subscribe("rates/update", function () {
-      getUpdatedCurrenctRates();
+      getUpdatedCurrencyRates();
     });
   },
 

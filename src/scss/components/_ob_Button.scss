@@ -8,6 +8,13 @@
     padding:7px 10px 5px;
   }
 
+  &--primary {
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    padding:14px 20px 10px;
+  }
+
   &--pos {
     background-color:$clrBlue;
 
@@ -21,6 +28,14 @@
 
     &:hover, &:focus, &:active {
       background-color:shade($clrRed,15%);
+    }
+  }
+
+  &--progress {
+    background-color:$clrGreen;
+
+    &:hover, &:focus, &:active {
+      background-color:shade($clrGreen,15%);
     }
   }
 }

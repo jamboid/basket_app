@@ -81,7 +81,7 @@ App.events = (function($) {
      * @function
      */
     init = function() {
-      console.log("App.events initialised");
+      //console.log("App.events initialised");
       //bindGlobalMessages();
       $body = $('body').eq(0);
     };

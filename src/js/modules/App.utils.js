@@ -15,14 +15,14 @@ App.utils = (function($) {
     ///////////////
 
     /**
-     * Console.log function with check for browsers that don't support it
+     * //console.log function with check for browsers that don't support it
      * @function
      */
     logMessage = function(logMessage) {
       if (debugMode === true) {
         if (typeof window.console !== 'undefined') {
-          if (typeof window.console.log !== 'undefined') {
-            window.console.log(logMessage);
+          if (typeof window.//console.log !== 'undefined') {
+            window.//console.log(logMessage);
           }
         }
       }
@@ -142,7 +142,7 @@ App.utils = (function($) {
      * @function
      */
     init = function() {
-      console.log("App.utils.init called");
+      //console.log("App.utils.init called");
     };
 
   ////////////////////////////////

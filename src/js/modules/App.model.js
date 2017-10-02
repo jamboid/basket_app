@@ -51,6 +51,10 @@ App.model = (function () {
     return products[productID];
   },
 
+  getProducts = function() {
+    return products;
+  },
+
   // Current Currency
   currentCurrency = 'GBP',
 
@@ -81,6 +85,7 @@ App.model = (function () {
     setExchangeRates:setExchangeRates,
     getExchangeRate:getExchangeRate,
     getProductInfo:getProductInfo,
+    getProducts:getProducts,
     setCurrentCurrency:setCurrentCurrency,
     getCurrentCurrency:getCurrentCurrency
   }
