@@ -537,32 +537,26 @@
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.config.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.events.js",
 			"position": 4,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.events.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.exchange.js",
 			"position": 5,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.exchange.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.model.js",
 			"position": 6,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.model.js",
-			"position": 7,
-			"type": 1
-			},
-		{
-			"followForSyntaxChecking": 1,
 			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.productList.js",
-			"position": 8,
+			"position": 7,
 			"type": 1
 			}
 		]

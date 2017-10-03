@@ -63,17 +63,12 @@ App.exchange = (function () {
 
     // Update the timeStamp for the rates
     // Rather than a Date object, we're using a moment object (using the Moment.js library)
-    // for easier comparison later on
+    // for easier comparison later on.
     exchangeRates.timeStamp = moment();
-
-    console.log(exchangeRates);
 
     // Publish a message stating the rates have been updated
     // This will let the other component subscribers know to update themselves
     $.publish('rates/updated');
-
-    // Log the newly update exchangeRates object
-
   },
 
   /**
@@ -95,7 +90,7 @@ App.exchange = (function () {
       var rightNow = moment(),
           then = exchangeRates.timeStamp;
 
-      console.log(moment.duration(rightNow.diff(then)).asHours());
+      //console.log(moment.duration(rightNow.diff(then)).asHours());
 
       if (parseInt(moment.duration(rightNow.diff(then)).asHours()) <= App.model.getCachePeriod() ) {
         //console.log('use cached exchange rates');

@@ -514,7 +514,6 @@ App.basket = (function ($) {
       //
       $thisBasketItem.on('removeItem', function(e) {
         e.preventDefault();
-        console.log('remove item');
         $thisBasketItem.remove();
         $.publish('basket/updated');
       });
@@ -564,7 +563,7 @@ App.basket = (function ($) {
      */
     switchCurrencies = function () {
       App.model.setCurrentCurrency($thisCurrencySwitcher.val());
-      console.log(App.model.getCurrentCurrency());
+      //console.log(App.model.getCurrentCurrency());
       $thisCurrencySwitcher.addClass('is_Updating');
     },
 
@@ -664,52 +663,6 @@ App.basket = (function ($) {
     addItemToBasket:addItemToBasket
   }
 }(jQuery));
-
-
-var App = App || {};
-
-App.config = (function() {
-
-  var rateAPIKey = '65790386c71ca815956382ad28ed41c9',
-
-  settings = {
-    // Base currency used to create exchange rates, as API currently only provides exchange rates for USD
-    "baseCurrency":"USDGBP",
-    // Currencies supported by this app, including name and symbol for use in the app UI
-    "currencies": {
-      "GBP": {
-        "name":"British Pounds",
-        "symbol":"£"
-      },
-      "USD":{
-        "name":"US Dollars",
-        "symbol":"$"
-      },
-      "EUR": {
-        "name":"Euros",
-        "symbol":"€"
-      },
-      "CAD": {
-        "name":"Canadian Dollars",
-        "symbol":"$"
-      }
-    },
-
-    'currencyAPI': {
-      'endpoint': 'http://apilayer.net/api/live?access_key=' + rateAPIKey + '&format=1&currencies=USD,GBP,EUR,AUD,CAD'
-    },
-  }
-
-
-  ////////////////////////////////
-  // Return Module's Public API //
-  ////////////////////////////////
-
-  return {
-    settings:settings
-  };
-
-}());
 
 
 // App.events.js
@@ -878,17 +831,12 @@ App.exchange = (function () {
 
     // Update the timeStamp for the rates
     // Rather than a Date object, we're using a moment object (using the Moment.js library)
-    // for easier comparison later on
+    // for easier comparison later on.
     exchangeRates.timeStamp = moment();
-
-    console.log(exchangeRates);
 
     // Publish a message stating the rates have been updated
     // This will let the other component subscribers know to update themselves
     $.publish('rates/updated');
-
-    // Log the newly update exchangeRates object
-
   },
 
   /**
@@ -910,7 +858,7 @@ App.exchange = (function () {
       var rightNow = moment(),
           then = exchangeRates.timeStamp;
 
-      console.log(moment.duration(rightNow.diff(then)).asHours());
+      //console.log(moment.duration(rightNow.diff(then)).asHours());
 
       if (parseInt(moment.duration(rightNow.diff(then)).asHours()) <= App.model.getCachePeriod() ) {
         //console.log('use cached exchange rates');

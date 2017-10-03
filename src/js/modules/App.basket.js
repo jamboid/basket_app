@@ -200,7 +200,6 @@ App.basket = (function ($) {
       //
       $thisBasketItem.on('removeItem', function(e) {
         e.preventDefault();
-        console.log('remove item');
         $thisBasketItem.remove();
         $.publish('basket/updated');
       });
@@ -250,7 +249,7 @@ App.basket = (function ($) {
      */
     switchCurrencies = function () {
       App.model.setCurrentCurrency($thisCurrencySwitcher.val());
-      console.log(App.model.getCurrentCurrency());
+      //console.log(App.model.getCurrentCurrency());
       $thisCurrencySwitcher.addClass('is_Updating');
     },
 
