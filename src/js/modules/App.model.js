@@ -9,7 +9,47 @@ for accessing and updating it.
 
 */
 App.model = (function () {
-  var exchangeRates,
+
+  // Settings
+
+  var rateAPIKey = '65790386c71ca815956382ad28ed41c9',
+
+  settings = {
+    // Base currency used to create exchange rates, as API currently only provides exchange rates for USD
+    "baseCurrency":"USDGBP",
+    // Currencies supported by this app, including name and symbol for use in the app UI
+    "currencies": {
+      "GBP": {
+        "name":"British Pounds",
+        "symbol":"£"
+      },
+      "USD":{
+        "name":"US Dollars",
+        "symbol":"$"
+      },
+      "EUR": {
+        "name":"Euros",
+        "symbol":"€"
+      },
+      "CAD": {
+        "name":"Canadian Dollars",
+        "symbol":"$"
+      }
+    },
+
+    'currencyAPI': {
+      'endpoint': 'http://apilayer.net/api/live?access_key=' + rateAPIKey + '&format=1&currencies=USD,GBP,EUR,AUD,CAD'
+    },
+  },
+
+  getAppSettings = function () {
+    return settings
+  },
+
+  // Exchange Rates
+
+  exchangeRates,
+  cachePeriod = 1, // Time in hours used to set cache period for exchange rates
 
   setExchangeRates = function (newRates) {
     exchangeRates = newRates;
@@ -17,6 +57,10 @@ App.model = (function () {
 
   getExchangeRate = function (currency) {
 
+  },
+
+  getCachePeriod = function () {
+    return cachePeriod;
   },
 
   /*
@@ -87,6 +131,8 @@ App.model = (function () {
     getProductInfo:getProductInfo,
     getProducts:getProducts,
     setCurrentCurrency:setCurrentCurrency,
-    getCurrentCurrency:getCurrentCurrency
+    getCurrentCurrency:getCurrentCurrency,
+    getAppSettings:getAppSettings,
+    getCachePeriod:getCachePeriod
   }
 }())

@@ -2,7 +2,7 @@
 
 .cp_ProductList {
   width:calc(100% - 440px);
-  transition:all 0.4s ease-in-out;
+  transition:all 0.4s ease-out;
   opacity: 1;
 
   /* !== List Item */
@@ -34,7 +34,7 @@
   /* !== Actions */
   &__itemActions {
     flex-grow:0;
-    padding-left: 30px;
+    padding-left: 15px;
   }
 }
 

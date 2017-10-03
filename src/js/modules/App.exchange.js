@@ -53,8 +53,6 @@ App.exchange = (function () {
     for (var key in newRates) {
       if (newRates.hasOwnProperty(key)) {
 
-
-
         // Calculate the exchange rate against the base currency
         var rateAgainstBaseCurrency  = parseFloat(newRates[key] / newRates[baseCurrency]);
         // Set the calculated rate in the exchangeRates object
@@ -64,7 +62,9 @@ App.exchange = (function () {
     }
 
     // Update the timeStamp for the rates
-    exchangeRates.timeStamp = new Date();
+    // Rather than a Date object, we're using a moment object (using the Moment.js library)
+    // for easier comparison later on
+    exchangeRates.timeStamp = moment();
 
     console.log(exchangeRates);
 
@@ -81,12 +81,34 @@ App.exchange = (function () {
    * @function
    */
   getUpdatedCurrencyRates = function () {
-    //console.log('update rates...');
-    var newRates = App.apis.get(App.config.settings.currencyAPI.endpoint)
+
+
+    // Because the currencylayer API only updates exchange rates data every hour,
+    // the App caches the rates and only updates them once per hour (or however
+    // long is getting in the App settings).
+
+    // If a timeStamp has been set in the exchangeRates object (i.e. rate have previously been set),
+    // check if the time since is greater than the cache period set in the App settings. If it is not
+    // use the cached rates and exit this function using a return. Otherwise, set new rates with a Ajax call
+    // to the currency API.
+    if(exchangeRates.timeStamp) {
+      var rightNow = moment(),
+          then = exchangeRates.timeStamp;
+
+      console.log(moment.duration(rightNow.diff(then)).asHours());
+
+      if (parseInt(moment.duration(rightNow.diff(then)).asHours()) <= App.model.getCachePeriod() ) {
+        //console.log('use cached exchange rates');
+        $.publish('rates/updated');
+        return;
+      }
+    }
+
+    var newRates = App.apis.get(App.model.getAppSettings().currencyAPI.endpoint)
     .then(function(data) {
-      //console.log('data', data);
+      //console.log('set new rates');
       // Set updated exchange rates, against a base currency
-      setRates(data.quotes, App.config.settings.baseCurrency);
+      setRates(data.quotes, App.model.getAppSettings().baseCurrency);
     });
   },
 
@@ -99,7 +121,6 @@ App.exchange = (function () {
       // This will cause the exchange rates to be updated and once completeSwitch
       // will send a "rates/updated" message causing the basket UI to update itself.
     $.subscribe("currency/switched", function () {
-      console.log('get updated currency rates');
       getUpdatedCurrencyRates();
     });
   },

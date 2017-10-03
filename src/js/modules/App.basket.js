@@ -25,10 +25,6 @@ App.basket = (function ($) {
   // DOM elements
   $basketList = $(selBasketList),
 
-  // Basket Status
-
-
-
   //////////////////
   // Constructors //
   //////////////////
@@ -46,29 +42,24 @@ App.basket = (function ($) {
         totalValue,
 
     /**
-     * Calculate the total price of the basket items and convert to the current currency if
-     * it differs from the default currency
+     * Calculate the total price of the basket items and convert to the current currency
      * @function
      */
     calculateBasketTotal = function () {
-      totalValue = 0,
-      totalInCurrentCurrency = 0,
-      currentCurrencySymbol = App.config.settings.currencies[App.model.getCurrentCurrency()].symbol;
+      totalValue = 0, // This will be the total of the basket item prices using the model data
+      totalInCurrentCurrency = 0, // This will be the total converted to the current currencny using the exchange rate
+      currentCurrencySymbol = App.model.getAppSettings().currencies[App.model.getCurrentCurrency()].symbol; // This is the currency symbol to prefix the total value with
 
-
-
+      // If there are any basket items
       if ($basketItems) {
+        // For each basket item
         $basketItems.each(function() {
           var itemInfo = App.model.getProductInfo($(this).data('basket-item'));
-          console.log(itemInfo.price);
           totalValue = totalValue + parseFloat(itemInfo.price);
         });
       }
 
-      console.log(App.model.getCurrentCurrency());
-
       totalInCurrentCurrency = totalValue * App.exchange.getSingleExchangeRate(App.model.getCurrentCurrency());
-
       $basketTotal.text(currentCurrencySymbol + totalInCurrentCurrency.toFixed(2));
     },
 
@@ -78,7 +69,6 @@ App.basket = (function ($) {
      */
     checkBasketContents = function () {
       $basketItems = $thisBasket.find(selBasketItem);
-
       if($basketItems.length > 0) {
         basketIsEmpty = false;
         $thisBasket.removeClass('is_Empty');
@@ -245,7 +235,7 @@ App.basket = (function ($) {
      * @function
      */
     buildSwitcherMenu = function () {
-      var currencies = App.config.settings.currencies;
+      var currencies = App.model.getAppSettings().currencies;
       //console.log(currencies);
 
       for (var currency in currencies) {
