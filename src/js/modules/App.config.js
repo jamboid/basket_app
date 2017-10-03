@@ -9,6 +9,10 @@ App.config = (function() {
     "baseCurrency":"USDGBP",
     // Currencies supported by this app, including name and symbol for use in the app UI
     "currencies": {
+      "GBP": {
+        "name":"British Pounds",
+        "symbol":"£"
+      },
       "USD":{
         "name":"US Dollars",
         "symbol":"$"
@@ -16,10 +20,6 @@ App.config = (function() {
       "EUR": {
         "name":"Euros",
         "symbol":"€"
-      },
-      "GBP": {
-        "name":"British Pounds",
-        "symbol":"£"
       },
       "CAD": {
         "name":"Canadian Dollars",

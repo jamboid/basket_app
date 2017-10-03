@@ -8,7 +8,7 @@ This module controls the functionality and display of the app's basket component
 
 */
 App.basket = (function ($) {
-  var
+  var $body = $('body').eq(0),
 
   // Selectors for DOM elements
   selBasket = '[data-basket=component]',
@@ -51,7 +51,8 @@ App.basket = (function ($) {
      * @function
      */
     calculateTotal = function () {
-      totalValue = 0;
+      totalValue = 0,
+      totalInCurrentCurrency = 0,
 
       $basketItems.each(function() {
         var itemInfo = App.model.getProductInfo($(this).data('basket-item'));
@@ -60,7 +61,11 @@ App.basket = (function ($) {
         totalValue = totalValue + parseFloat(itemInfo.price);
       });
 
-      $basketTotal.text(totalValue.toFixed(2));
+      console.log(App.model.getCurrentCurrency());
+
+      totalInCurrentCurrency = totalValue * App.exchange.getSingleExchangeRate(App.model.getCurrentCurrency());
+
+      $basketTotal.text(totalInCurrentCurrency.toFixed(2));
     },
 
     /**
@@ -78,14 +83,19 @@ App.basket = (function ($) {
         basketIsEmpty = true;
         $thisBasket.addClass('is_Empty');
         calculateTotal();
+        $body.removeClass('is_CheckingOut');
       }
     },
 
+    /**
+     * Add/Remove a class on the document body depending on the mode the App is in
+     * @function
+     */
     setMode = function (mode) {
       if(mode === 'checkout') {
-        $thisBasket.addClass('is_CheckingOut');
+        $body.addClass('is_CheckingOut');
       } else {
-        $thisBasket.removeClass('is_CheckingOut');
+        $body.removeClass('is_CheckingOut');
       }
 
     },
@@ -109,6 +119,11 @@ App.basket = (function ($) {
         e.preventDefault();
         setMode('shop');
       });
+
+      $thisBasket.on('updateTotal', function(e) {
+        e.preventDefault();
+        calculateTotal();
+      });
     },
 
     /**
@@ -116,8 +131,12 @@ App.basket = (function ($) {
      * @function
      */
     subscribeToEvents = function () {
-      $.subscribe("basket/updated", function () {
-        $(this).trigger("checkBasketStatus");
+      $.subscribe('basket/updated', function () {
+        $(this).trigger('checkBasketStatus');
+      } , $thisBasket);
+
+      $.subscribe('rates/updated', function () {
+        $(this).trigger('updateTotal');
       } , $thisBasket);
     };
 
@@ -199,11 +218,10 @@ App.basket = (function ($) {
      */
     subscribeToEvents = function () {
       // Subscrive to layoutchange event to trigger scroller's updateLayout method
-      $.subscribe("currency/switched", function () {
-        $(this).trigger("updatePrice");
-      } , $thisBasketItem);
+      // $.subscribe("currency/switched", function () {
+      //   $(this).trigger("updatePrice");
+      // } , $thisBasketItem);
     };
-
 
     this.init = function () {
       buildItem();
@@ -233,16 +251,36 @@ App.basket = (function ($) {
     },
 
     /**
+     * Switch the current currency in the App model and set this component to "updating" mode until it is complete
+     * @function
+     */
+    switchCurrencies = function () {
+      App.model.setCurrentCurrency($thisCurrencySwitcher.val());
+      console.log(App.model.getCurrentCurrency());
+      $thisCurrencySwitcher.addClass('is_Updating');
+    },
+
+    /**
+     * Switch this component from 'updating' mode
+     * @function
+     */
+    completeSwitch = function () {
+      $thisCurrencySwitcher.removeClass('is_Updating');
+    },
+
+    /**
      * Bind Custom Events to allow Object messaging
      * @function
      */
     bindCustomMessageEvents = function () {
       $thisCurrencySwitcher.on('changeCurrency', function(e) {
-
         e.preventDefault();
-        App.model.setCurrentCurrency($thisCurrencySwitcher.val());
+        switchCurrencies();
+      });
 
-        console.log(App.model.getCurrentCurrency());
+      $thisCurrencySwitcher.on('ratesUpdated', function(e) {
+        e.preventDefault();
+        completeSwitch();
       });
     },
 
@@ -251,7 +289,9 @@ App.basket = (function ($) {
      * @function
      */
     subscribeToEvents = function () {
-      // Subscrive to layoutchange event to trigger scroller's updateLayout method
+      $.subscribe("rates/updated", function () {
+        $(this).trigger("ratesUpdated");
+      } , $thisCurrencySwitcher);
     };
 
     this.init = function () {

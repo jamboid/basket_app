@@ -210,13 +210,6 @@ App.init = (function ($) {
         App.productList.init();
         App.basket.init();
 
-        //$.publish('rates/update');
-
-        // var testGet = App.exchange.getExchangeRate('AUD')
-        // .then(function(response) {
-        //   //console.log(response);
-        // });
-
       });
     };
 
@@ -248,7 +241,7 @@ App.apis = (function($) {
   var
 
     /**
-     * Check the status of the fetch response and return the response if okay,
+     * Check the status of the fetch response, then process and return the response if okay,
      * or handle the error if needed.
      * @function
      */
@@ -262,6 +255,8 @@ App.apis = (function($) {
         throw new TypeError("Sorry, we haven't got JSON!");
       }
       throw Error(response.statusText);
+      // Publish an error message to let the UI components know about the error
+      $.publish('ajax/error');
     },
 
     /**
@@ -320,6 +315,10 @@ App.config = (function() {
     "baseCurrency":"USDGBP",
     // Currencies supported by this app, including name and symbol for use in the app UI
     "currencies": {
+      "GBP": {
+        "name":"British Pounds",
+        "symbol":"£"
+      },
       "USD":{
         "name":"US Dollars",
         "symbol":"$"
@@ -327,10 +326,6 @@ App.config = (function() {
       "EUR": {
         "name":"Euros",
         "symbol":"€"
-      },
-      "GBP": {
-        "name":"British Pounds",
-        "symbol":"£"
       },
       "CAD": {
         "name":"Canadian Dollars",
@@ -477,15 +472,23 @@ App.exchange = (function () {
    * This will be based on
    * @function
    */
-  getExchangeRate = function(newCurrency) {
+  getSingleExchangeRate = function(currency) {
     // If the exchangeRates object has been populated with data
     // i.e. the timeStamp value has been set, return the rates
-    // for the given currency, otherwise return null.
-    if(exchangeRates.timeStamp !== '') {
-      return exchangeRates.rates[newCurrency];
-    } else {
-      return null;
+    // for the given currency, otherwise throw and catch an error.
+    try {
+      if(exchangeRates.rates[currency]) {
+        return exchangeRates.rates[currency];
+      } else {
+        throw "No exchange rate data";
+      }
+    } catch (error) {
+      console.log(error);
+      $.publish('data-error/exchange-rates');
     }
+    // finally {
+    //
+    // }
   },
 
   /**
@@ -502,9 +505,13 @@ App.exchange = (function () {
     // Set rates in the exchangeRates.rates object
     for (var key in newRates) {
       if (newRates.hasOwnProperty(key)) {
+
+
+
         // Calculate the exchange rate against the base currency
-        var rateAgainstBaseCurrency  = newRates[key] / newRates[baseCurrency];
+        var rateAgainstBaseCurrency  = parseFloat(newRates[key] / newRates[baseCurrency]);
         // Set the calculated rate in the exchangeRates object
+        key = key.substring(3);
         exchangeRates.rates[key] = rateAgainstBaseCurrency;
       }
     }
@@ -512,22 +519,25 @@ App.exchange = (function () {
     // Update the timeStamp for the rates
     exchangeRates.timeStamp = new Date();
 
+    console.log(exchangeRates);
+
     // Publish a message stating the rates have been updated
     // This will let the other component subscribers know to update themselves
     $.publish('rates/updated');
 
     // Log the newly update exchangeRates object
-    //console.log(exchangeRates);
+
   },
 
   /**
    * Call the currency API, using the App.apis module, and update the rates data with the result
    * @function
    */
-  getUpdatedCurrencyRates = function (newCurrency) {
+  getUpdatedCurrencyRates = function () {
     //console.log('update rates...');
     var newRates = App.apis.get(App.config.settings.currencyAPI.endpoint)
     .then(function(data) {
+      //console.log('data', data);
       // Set updated exchange rates, against a base currency
       setRates(data.quotes, App.config.settings.baseCurrency);
     });
@@ -538,8 +548,11 @@ App.exchange = (function () {
    * @function
    */
   subscribeToMessages = function () {
-      // Subscrive to layoutchange event to trigger scroller's updateLayout method
-    $.subscribe("rates/update", function () {
+      // Subscrive to "currency/switched" message
+      // This will cause the exchange rates to be updated and once completeSwitch
+      // will send a "rates/updated" message causing the basket UI to update itself.
+    $.subscribe("currency/switched", function () {
+      console.log('get updated currency rates');
       getUpdatedCurrencyRates();
     });
   },
@@ -559,7 +572,7 @@ App.exchange = (function () {
 
   return {
     init:init,
-    getExchangeRate:getExchangeRate,
+    getSingleExchangeRate:getSingleExchangeRate,
     setRates:setRates
   }
 }())
@@ -805,7 +818,7 @@ This module controls the functionality and display of the app's basket component
 
 */
 App.basket = (function ($) {
-  var
+  var $body = $('body').eq(0),
 
   // Selectors for DOM elements
   selBasket = '[data-basket=component]',
@@ -848,7 +861,8 @@ App.basket = (function ($) {
      * @function
      */
     calculateTotal = function () {
-      totalValue = 0;
+      totalValue = 0,
+      totalInCurrentCurrency = 0,
 
       $basketItems.each(function() {
         var itemInfo = App.model.getProductInfo($(this).data('basket-item'));
@@ -857,7 +871,11 @@ App.basket = (function ($) {
         totalValue = totalValue + parseFloat(itemInfo.price);
       });
 
-      $basketTotal.text(totalValue.toFixed(2));
+      console.log(App.model.getCurrentCurrency());
+
+      totalInCurrentCurrency = totalValue * App.exchange.getSingleExchangeRate(App.model.getCurrentCurrency());
+
+      $basketTotal.text(totalInCurrentCurrency.toFixed(2));
     },
 
     /**
@@ -875,14 +893,19 @@ App.basket = (function ($) {
         basketIsEmpty = true;
         $thisBasket.addClass('is_Empty');
         calculateTotal();
+        $body.removeClass('is_CheckingOut');
       }
     },
 
+    /**
+     * Add/Remove a class on the document body depending on the mode the App is in
+     * @function
+     */
     setMode = function (mode) {
       if(mode === 'checkout') {
-        $thisBasket.addClass('is_CheckingOut');
+        $body.addClass('is_CheckingOut');
       } else {
-        $thisBasket.removeClass('is_CheckingOut');
+        $body.removeClass('is_CheckingOut');
       }
 
     },
@@ -906,6 +929,11 @@ App.basket = (function ($) {
         e.preventDefault();
         setMode('shop');
       });
+
+      $thisBasket.on('updateTotal', function(e) {
+        e.preventDefault();
+        calculateTotal();
+      });
     },
 
     /**
@@ -913,8 +941,12 @@ App.basket = (function ($) {
      * @function
      */
     subscribeToEvents = function () {
-      $.subscribe("basket/updated", function () {
-        $(this).trigger("checkBasketStatus");
+      $.subscribe('basket/updated', function () {
+        $(this).trigger('checkBasketStatus');
+      } , $thisBasket);
+
+      $.subscribe('rates/updated', function () {
+        $(this).trigger('updateTotal');
       } , $thisBasket);
     };
 
@@ -996,11 +1028,10 @@ App.basket = (function ($) {
      */
     subscribeToEvents = function () {
       // Subscrive to layoutchange event to trigger scroller's updateLayout method
-      $.subscribe("currency/switched", function () {
-        $(this).trigger("updatePrice");
-      } , $thisBasketItem);
+      // $.subscribe("currency/switched", function () {
+      //   $(this).trigger("updatePrice");
+      // } , $thisBasketItem);
     };
-
 
     this.init = function () {
       buildItem();
@@ -1030,16 +1061,36 @@ App.basket = (function ($) {
     },
 
     /**
+     * Switch the current currency in the App model and set this component to "updating" mode until it is complete
+     * @function
+     */
+    switchCurrencies = function () {
+      App.model.setCurrentCurrency($thisCurrencySwitcher.val());
+      console.log(App.model.getCurrentCurrency());
+      $thisCurrencySwitcher.addClass('is_Updating');
+    },
+
+    /**
+     * Switch this component from 'updating' mode
+     * @function
+     */
+    completeSwitch = function () {
+      $thisCurrencySwitcher.removeClass('is_Updating');
+    },
+
+    /**
      * Bind Custom Events to allow Object messaging
      * @function
      */
     bindCustomMessageEvents = function () {
       $thisCurrencySwitcher.on('changeCurrency', function(e) {
-
         e.preventDefault();
-        App.model.setCurrentCurrency($thisCurrencySwitcher.val());
+        switchCurrencies();
+      });
 
-        console.log(App.model.getCurrentCurrency());
+      $thisCurrencySwitcher.on('ratesUpdated', function(e) {
+        e.preventDefault();
+        completeSwitch();
       });
     },
 
@@ -1048,7 +1099,9 @@ App.basket = (function ($) {
      * @function
      */
     subscribeToEvents = function () {
-      // Subscrive to layoutchange event to trigger scroller's updateLayout method
+      $.subscribe("rates/updated", function () {
+        $(this).trigger("ratesUpdated");
+      } , $thisCurrencySwitcher);
     };
 
     this.init = function () {

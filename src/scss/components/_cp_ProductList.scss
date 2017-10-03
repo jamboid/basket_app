@@ -1,8 +1,9 @@
 /* !== Component - Product List */
 
 .cp_ProductList {
-  flex:0 0 calc(100% - 400px);
-  padding-right: 40px;
+  width:calc(100% - 440px);
+  transition:all 0.4s ease-in-out;
+  opacity: 1;
 
   /* !== List Item */
   &__item {
@@ -15,6 +16,7 @@
   }
 
   &__itemName {
+    flex-shrink:0;
     &:not(:last-child) {
       margin-bottom:em(7,20);
     }
@@ -33,5 +35,15 @@
   &__itemActions {
     flex-grow:0;
     padding-left: 30px;
+  }
+}
+
+
+.is_CheckingOut {
+  .cp_ProductList {
+    width:0px;
+    padding: 0;
+    opacity: 0;
+    overflow: hidden;
   }
 }

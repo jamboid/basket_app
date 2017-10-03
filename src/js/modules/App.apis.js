@@ -18,7 +18,7 @@ App.apis = (function($) {
   var
 
     /**
-     * Check the status of the fetch response and return the response if okay,
+     * Check the status of the fetch response, then process and return the response if okay,
      * or handle the error if needed.
      * @function
      */
@@ -32,6 +32,8 @@ App.apis = (function($) {
         throw new TypeError("Sorry, we haven't got JSON!");
       }
       throw Error(response.statusText);
+      // Publish an error message to let the UI components know about the error
+      $.publish('ajax/error');
     },
 
     /**
