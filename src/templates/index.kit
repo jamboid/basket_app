@@ -35,12 +35,19 @@
               </section>
               <a href="" class="cp_Basket__checkoutToggle ob_Button--progress ob_Button--primary ob_Button" data-basket-action="checkout">Checkout</a>
               <section class="cp_Basket__checkout">
-                <section class="cp_Basket__total" data-basket="total"></section>
-                <form class="cp_Basket__currSwitcher">
-                  <h3 class="cp_Basket__currSwitcherTitle">Change currency</h3>
+                <section class="cp_Basket__total gd_Group">
+                  <h3 class="cp_Basket__totalTitle">Total</h3>
+                  <h2 class="cp_Basket__totalAmount" data-basket="total"></h2>
+                </section>
+                <form class="cp_Basket__currSwitcher gd_Group">
+                  <h3 class="cp_Basket__currSwitcherTitle">Payment in</h3>
                   <select class="cp_Basket__currSwitcherMenu" name="" data-basket="currency-switcher"></select>
                 </form>
-                <a href="#" class="cp_Basket__return" data-basket-action="return">Continue shopping</a>
+                <div class="cp_Basket__checkoutActions">
+                <p><a href="" class="cp_Basket__onwardAction ob_Button--progress ob_Button--primary ob_Button" data-basket-action="checkout">Continue to payment</a></p>
+                <p>or</p>
+                <p><a href="#" class="cp_Basket__return ob_Button--pos ob_Button--list ob_Button" data-basket-action="return">Continue shopping</a></p>
+                </div>
               </section>
             </div>
           </div>

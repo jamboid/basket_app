@@ -65,7 +65,7 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/build\/js\/modules\/min\/App.apis-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -515,37 +515,37 @@
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.config.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.basket.js",
 			"position": 2,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.events.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.config.js",
 			"position": 3,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.exchange.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.events.js",
 			"position": 4,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.model.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.exchange.js",
 			"position": 5,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.productList.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.model.js",
 			"position": 6,
 			"type": 1
 			},
 		{
 			"followForSyntaxChecking": 1,
-			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.basket.js",
+			"linkedFileAbbreviatedPath": "\/src\/js\/modules\/App.productList.js",
 			"position": 7,
 			"type": 1
 			}
@@ -556,7 +556,7 @@
 	"displayValue": "Basket",
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-jake",
-	"lastBuiltDate": 528501251
+	"lastBuiltDate": 528754798
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

@@ -14,6 +14,10 @@
     box-shadow:0 4px 7px $clrVeryLightGrey;
   }
 
+  p {
+    margin:0.5em 0;
+  }
+
   &__noItems {
     display: none;
   }
@@ -22,9 +26,99 @@
     display:none;
   }
 
+  &__list {
+    padding: 20px 0;
+  }
+
+  /* !== Basket Item */
+  &__item {
+    padding:5px 0;
+    /* Extend Grid */
+    align-items:center;
+  }
+
+  &__itemName {
+    font-size: 20px;
+  }
+
+  &__itemActions {
+    padding-left: 20px;
+  }
+
+  &__removeAction {
+    display: block;
+    width: 30px;
+    height: 30px;
+    text-indent: -9999px;
+    background:$clrRed;
+    position: relative;
+    border-radius:20px;
+
+    &:after,
+    &:before {
+      content:"";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 3px;
+      background:$clrWhite;
+    }
+
+    &:before {
+      transform:translateX(-50%) translateY(-50%) rotate(45deg);
+    }
+
+    &:after {
+      transform:translateX(-50%) translateY(-50%) rotate(-45deg);
+    }
+  }
+
+  /* !== Checkout */
+  &__checkoutActions {
+    text-align: center;
+  }
+
   /* !== Currency Switcher */
+  &__currSwitcher {
+    padding: 10px 0 20px;
+    /* Extend Grid */
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  &__currSwitcherTitle {
+    font-size:16px;
+    color:$clrGrey;
+  }
+
   &__currSwitcherMenu {
     font-size:16px;
+  }
+
+  /* !== Total */
+  &__total {
+    padding:10px 0;
+    /* Extend Grid */
+    align-items:center;
+    justify-content:space-between;
+    border-top:2px solid $clrLightGrey;
+  }
+
+  &__totalTitle {
+    font-size: 24px;
+    font-weight: normal;
+    color:$clrGrey;
+  }
+
+  &__totalAmount {
+    font-size: 32px;
+  }
+
+  /* !== Return Link */
+  &__return {
+
   }
 
   /* !== Basket Status */
@@ -44,6 +138,10 @@
   .cp_Basket {
     &__checkout {
       display: block;
+    }
+
+    &__checkoutToggle {
+      display: none;
     }
   }
 }

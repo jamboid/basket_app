@@ -50,22 +50,26 @@ App.basket = (function ($) {
      * it differs from the default currency
      * @function
      */
-    calculateTotal = function () {
+    calculateBasketTotal = function () {
       totalValue = 0,
       totalInCurrentCurrency = 0,
+      currentCurrencySymbol = App.config.settings.currencies[App.model.getCurrentCurrency()].symbol;
 
-      $basketItems.each(function() {
-        var itemInfo = App.model.getProductInfo($(this).data('basket-item'));
-        console.log(itemInfo.price);
 
-        totalValue = totalValue + parseFloat(itemInfo.price);
-      });
+
+      if ($basketItems) {
+        $basketItems.each(function() {
+          var itemInfo = App.model.getProductInfo($(this).data('basket-item'));
+          console.log(itemInfo.price);
+          totalValue = totalValue + parseFloat(itemInfo.price);
+        });
+      }
 
       console.log(App.model.getCurrentCurrency());
 
       totalInCurrentCurrency = totalValue * App.exchange.getSingleExchangeRate(App.model.getCurrentCurrency());
 
-      $basketTotal.text(totalInCurrentCurrency.toFixed(2));
+      $basketTotal.text(currentCurrencySymbol + totalInCurrentCurrency.toFixed(2));
     },
 
     /**
@@ -78,11 +82,11 @@ App.basket = (function ($) {
       if($basketItems.length > 0) {
         basketIsEmpty = false;
         $thisBasket.removeClass('is_Empty');
-        calculateTotal();
+        calculateBasketTotal();
       } else {
         basketIsEmpty = true;
         $thisBasket.addClass('is_Empty');
-        calculateTotal();
+        calculateBasketTotal();
         $body.removeClass('is_CheckingOut');
       }
     },
@@ -94,10 +98,10 @@ App.basket = (function ($) {
     setMode = function (mode) {
       if(mode === 'checkout') {
         $body.addClass('is_CheckingOut');
+        calculateBasketTotal();
       } else {
         $body.removeClass('is_CheckingOut');
       }
-
     },
 
     /**
@@ -122,7 +126,7 @@ App.basket = (function ($) {
 
       $thisBasket.on('updateTotal', function(e) {
         e.preventDefault();
-        calculateTotal();
+        calculateBasketTotal();
       });
     },
 
@@ -170,7 +174,7 @@ App.basket = (function ($) {
         </div>
         <div class="cp_Basket__itemPrice">£<span class="cp_Basket__itemPriceValue" data-basket="itemPrice">${productInfo.price}</span></div>
         <div class="cp_Basket__itemActions">
-          <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button" data-basket-action="remove">Remove</a>
+          <a href="#" class="cp_Basket__removeAction" data-basket-action="remove">Remove</a>
         </div>
       </div>
       `
@@ -299,8 +303,9 @@ App.basket = (function ($) {
       // options are added to the menu before setting up the related event listeners and message subscriptions.
       bindCustomMessageEvents();
       subscribeToEvents();
-
       buildSwitcherMenu();
+
+      $.publish('currency/switched');
     };
   },
 
