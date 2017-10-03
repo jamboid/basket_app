@@ -10,8 +10,33 @@
     box-shadow:0 4px 7px $clrVeryLightGrey;
   }
 
+  &__noItems {
+    display: none;
+  }
+
+  &__checkout {
+    display:none;
+  }
+
   /* !== Currency Switcher */
   &__currSwitcherMenu {
     font-size:16px;
+  }
+
+  /* !== Basket Status */
+  &.is_Empty {
+    .cp_Basket__noItems {
+      display: block;
+    }
+
+    .cp_Basket__checkoutToggle {
+      display: none;
+    }
+  }
+
+  &.is_CheckingOut {
+    .cp_Basket__checkout {
+      display: block;
+    }
   }
 }

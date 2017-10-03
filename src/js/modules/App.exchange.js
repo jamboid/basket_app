@@ -35,8 +35,6 @@ App.exchange = (function () {
    * @function
    */
   setRates = function (newRates,baseCurrency) {
-    //console.log(newRates);
-
     /*
     The free version of the currencylayer API used currently only provides exchange
     rates against the US Dollar, so we need to cross calculate the exchange rates for

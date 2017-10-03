@@ -13,18 +13,121 @@ App.basket = (function ($) {
   // Selectors for DOM elements
   selBasket = '[data-basket=component]',
   selBasketList = '[data-basket=list]',
-  selBasketItem = '[data-basket=basketItem]',
+  selBasketItem = '[data-basket-item]',
+  selBasketItemPriceValue = '[data-basket=itemPrice]',
   selBasketItemRemoveButton = '[data-basket-action=remove]',
+  selBasketItemCheckoutButton = '[data-basket-action=checkout]',
+  selBasketItemReturnLink = '[data-basket-action=return]',
+  selBasketTotal = '[data-basket=total]',
   selBasketCurrencySwitcher = 'select[data-basket=currency-switcher]',
   selBasketCurrencySwitcherOption = '[data-basket=currency-switcher] option',
 
   // DOM elements
   $basketList = $(selBasketList),
 
+  // Basket Status
+
+
 
   //////////////////
   // Constructors //
   //////////////////
+
+  /**
+   * Basket object constructor
+   * An instance of this 'class' controls the general functionality of the Basket component.
+   * @constructor
+   */
+  Basket = function (elem) {
+    var $thisBasket = $(elem),
+        $basketItems,
+        $basketTotal = $thisBasket.find(selBasketTotal).eq(0),
+        basketIsEmpty = true,
+        totalValue,
+
+    /**
+     * Calculate the total price of the basket items and convert to the current currency if
+     * it differs from the default currency
+     * @function
+     */
+    calculateTotal = function () {
+      totalValue = 0;
+
+      $basketItems.each(function() {
+        var itemInfo = App.model.getProductInfo($(this).data('basket-item'));
+        console.log(itemInfo.price);
+
+        totalValue = totalValue + parseFloat(itemInfo.price);
+      });
+
+      $basketTotal.text(totalValue.toFixed(2));
+    },
+
+    /**
+     * Check the contents of the basket and updated it's status accordingly
+     * @function
+     */
+    checkBasketContents = function () {
+      $basketItems = $thisBasket.find(selBasketItem);
+
+      if($basketItems.length > 0) {
+        basketIsEmpty = false;
+        $thisBasket.removeClass('is_Empty');
+        calculateTotal();
+      } else {
+        basketIsEmpty = true;
+        $thisBasket.addClass('is_Empty');
+        calculateTotal();
+      }
+    },
+
+    setMode = function (mode) {
+      if(mode === 'checkout') {
+        $thisBasket.addClass('is_CheckingOut');
+      } else {
+        $thisBasket.removeClass('is_CheckingOut');
+      }
+
+    },
+
+    /**
+     * Bind Custom Events to allow Object messaging
+     * @function
+     */
+    bindCustomMessageEvents = function () {
+      $thisBasket.on('checkBasketStatus', function(e) {
+        e.preventDefault();
+        checkBasketContents();
+      });
+
+      $thisBasket.on('checkout', function(e) {
+        e.preventDefault();
+        setMode('checkout');
+      });
+
+      $thisBasket.on('shop', function(e) {
+        e.preventDefault();
+        setMode('shop');
+      });
+    },
+
+    /**
+     * Subscribe object to Global Messages
+     * @function
+     */
+    subscribeToEvents = function () {
+      $.subscribe("basket/updated", function () {
+        $(this).trigger("checkBasketStatus");
+      } , $thisBasket);
+    };
+
+
+    this.init = function () {
+
+      bindCustomMessageEvents();
+      subscribeToEvents();
+    };
+  },
 
   /**
    * BasketItem object constructor
@@ -42,11 +145,11 @@ App.basket = (function ($) {
      * @function
      */
     buildItemMarkup = function () {
-      return `<div class="cp_Basket__item gd_Group">
+      return `<div class="cp_Basket__item gd_Group" data-basket-item="${productID}">
         <div class="cp_ProductList__itemInfo">
           <div class="cp_Basket__itemName">${productInfo.name}</div>
         </div>
-        <div class="cp_Basket__itemPrice">${productInfo.price}</div>
+        <div class="cp_Basket__itemPrice">£<span class="cp_Basket__itemPriceValue" data-basket="itemPrice">${productInfo.price}</span></div>
         <div class="cp_Basket__itemActions">
           <a href="#" class="cp_Basket__removeAction ob_Button--neg ob_Button--list ob_Button" data-basket-action="remove">Remove</a>
         </div>
@@ -86,6 +189,7 @@ App.basket = (function ($) {
         e.preventDefault();
         console.log('remove item');
         $thisBasketItem.remove();
+        $.publish('basket/updated');
       });
     },
 
@@ -170,10 +274,8 @@ App.basket = (function ($) {
    */
   addItemToBasket = function (productID) {
     var newBasketItem = new BasketItem(productID).init();
+    $.publish('basket/updated');
   },
-
-
-
 
   /**
    * Create delegate event listeners for this module
@@ -181,6 +283,8 @@ App.basket = (function ($) {
    */
   delegateEvents = function () {
     App.events.delegate("click", selBasketItemRemoveButton, "removeItem");
+    App.events.delegate("click", selBasketItemCheckoutButton, "checkout");
+    App.events.delegate("click", selBasketItemReturnLink, "shop");
     App.events.delegate("change", selBasketCurrencySwitcher, "changeCurrency");
   },
 
@@ -193,6 +297,10 @@ App.basket = (function ($) {
     delegateEvents();
 
     // Build basket components
+    $(selBasket).each(function() {
+      var newBasket = new Basket(this).init();
+    });
+
     $(selBasketCurrencySwitcher).each(function() {
       var newCurrencySwitcher = new CurrencySwitcher(this).init();
     });

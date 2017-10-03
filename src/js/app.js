@@ -56,7 +56,6 @@ App.init = (function ($) {
         //   //console.log(response);
         // });
 
-
       });
     };
 
