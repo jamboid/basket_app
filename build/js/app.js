@@ -171,28 +171,6 @@ return k({},n(this))}function Bc(){return n(this).overflow}function Cc(){return{
 
 // app.js
 
-/*
-
-## App Objects
-- Ajax/API Helper
-  - Abstraction to allow Ajax calls for both the product and currency lists
-  - Uses Fetch/Promise functionality
-- Basket
-  - Contains an array of products
-- Product List
-- Product
-
-4. Currency Selector
-5. Currency Convertor
-
-## App Functionality
-- App is initialised
-  - List of products is loaded via Ajax
-  -
-
-
-*/
-
 var App = {};
 
 App.init = (function ($) {
@@ -211,13 +189,15 @@ App.init = (function ($) {
     Modules.init = function () {
       // When the DOM is ready, initialise the app modules using their init() functions
       $(document).ready(function () {
-
+        // Each module is an IIFE, but each also has an init function that initiates
+        // module function only at this point, once the document is ready.
+        // In this not all the modules' init functions are called, because
+        // some are currently used for anything.
         App.events.init();
         App.apis.init();
         App.exchange.init();
         App.productList.init();
         App.basket.init();
-
       });
     };
 
@@ -260,15 +240,20 @@ App.apis = (function($) {
         if(contentType && contentType.includes("application/json")) {
           return response.json();
         }
+        $.publish('ajax/error');
         throw new TypeError("Sorry, we haven't got JSON!");
       }
+
+      $.publish('ajax/error');
       throw Error(response.statusText);
       // Publish an error message to let the UI components know about the error
-      $.publish('ajax/error');
+
     },
 
     /**
      * This is an function to abstract a GET Ajax call to a JSON endpoint, currently using the Fetch API
+     * Future development would make this a more generic function, where the endpoint content type could be
+     * passed as a parameter.
      * @function
      */
     get = function(endpoint) {
@@ -287,7 +272,8 @@ App.apis = (function($) {
     },
 
     /**
-     * This is an function stub to abstract a POST Ajax call
+     * This is an function stub to abstract a POST Ajax call, not used in this version of the App,
+     * but could be used in the future.
      * @function
      */
     post = function(endpoint) {
@@ -295,8 +281,13 @@ App.apis = (function($) {
       return null;
     },
 
+    /**
+     * This is the initialsation function for the module
+     * @function
+     */
     init = function() {
       //console.log("App.apis initialised");
+      // Not currently used for anything, and therefore not called in App.js
     };
 
   ////////////////////////////////
@@ -319,24 +310,36 @@ var App = App || {};
 App.basket.js
 
 This module controls the functionality and display of the app's basket component.
+This consists of three types of sub-components:
+
+* The Basket Container, controlled using an instance of the Basket 'class'
+* One or more Basket Items, controlled using instances of the BasketItem 'class'
+* The Currency Switcher, controlled using an instance of the CurrencySwitcher 'class'
+
+Each of the UI sub-components is loosely coupled to the other components on the page and communication
+is generally handled using the publish/subscribe messaging system.
 
 */
 App.basket = (function ($) {
   var $body = $('body').eq(0),
 
-  // Selectors for DOM elements
+  // Selectors for DOM elements are generally data- attributes, rather than
+  // ID/Classes. I'll generally do this to improve reuse of the code across projects.
   selBasket = '[data-basket=component]',
   selBasketList = '[data-basket=list]',
   selBasketItem = '[data-basket-item]',
   selBasketItemPriceValue = '[data-basket=itemPrice]',
   selBasketItemRemoveButton = '[data-basket-action=remove]',
   selBasketItemCheckoutButton = '[data-basket-action=checkout]',
+  selBasketItemPaymentButton = '[data-basket-action=payment]',
   selBasketItemReturnLink = '[data-basket-action=return]',
   selBasketTotal = '[data-basket=total]',
   selBasketCurrencySwitcher = 'select[data-basket=currency-switcher]',
   selBasketCurrencySwitcherOption = '[data-basket=currency-switcher] option',
 
-  // DOM elements
+  // Referemces to DOM elements
+  // The basket list container element is part of the static template so we can create
+  // a reference to it at this point.
   $basketList = $(selBasketList),
 
   //////////////////
@@ -360,20 +363,31 @@ App.basket = (function ($) {
      * @function
      */
     calculateBasketTotal = function () {
-      totalValue = 0, // This will be the total of the basket item prices using the model data
-      totalInCurrentCurrency = 0, // This will be the total converted to the current currencny using the exchange rate
-      currentCurrencySymbol = App.model.getAppSettings().currencies[App.model.getCurrentCurrency()].symbol; // This is the currency symbol to prefix the total value with
+      // This will be the total of the basket item prices using the model data
+      totalValue = 0,
+      // This will be the total converted to the current currencny using the exchange rate
+      totalInCurrentCurrency = 0,
+      // This is the currency symbol to prefix the total value with
+      currentCurrencySymbol = App.model.getAppSettings().currencies[App.model.getCurrentCurrency()].symbol;
 
       // If there are any basket items
       if ($basketItems) {
-        // For each basket item
+        // For each basket item..
         $basketItems.each(function() {
-          var itemInfo = App.model.getProductInfo($(this).data('basket-item'));
-          totalValue = totalValue + parseFloat(itemInfo.price);
+          // Get the product info by querying the model using the product ID set
+          // as a data attribute on the basket item element
+          var productInfo = App.model.getProductInfo($(this).data('basket-item'));
+          totalValue = totalValue + parseFloat(productInfo.price);
         });
       }
 
+      // Calculate the basket total in the currently-selected currency by getting the exchange rate
+      // for that currency by calling the getSingleExchangeRate function in the App.exchange module, with
+      // the parameter being the currenyCurrency variable held in the App.model module.
       totalInCurrentCurrency = totalValue * App.exchange.getSingleExchangeRate(App.model.getCurrentCurrency());
+      // Set the basket text using the symbol and value (adjusted to two decimal places)
+      // NOTE: A more advanced version of this functionality may need to format the total string differently,
+      // depending on the currency.
       $basketTotal.text(currentCurrencySymbol + totalInCurrentCurrency.toFixed(2));
     },
 
@@ -382,15 +396,28 @@ App.basket = (function ($) {
      * @function
      */
     checkBasketContents = function () {
+      // Get any item elements currently in the basket container elements
       $basketItems = $thisBasket.find(selBasketItem);
+      // And if there are any...
       if($basketItems.length > 0) {
+        // Set the empty variable to false
         basketIsEmpty = false;
+        // Remove the 'is_Empty' class, which sets the UI mode
         $thisBasket.removeClass('is_Empty');
+        // And update the basket total. This is calculated and updated whether
+        // the total is displayed or not, to keep the UI consistent
         calculateBasketTotal();
       } else {
+        // Set the empty variable to true
         basketIsEmpty = true;
+        // Add the 'is_Empty' class, which sets the UI mode
         $thisBasket.addClass('is_Empty');
+        // And update the basket total (to 0.00). This is calculated and updated whether
+        // the total is displayed or not, to keep the UI consistent
         calculateBasketTotal();
+        // Remove the is_CheckingOut class from the body element. This set's the App's UI mode to 'shopping',
+        // where the product list is displayed and the basket only shows the contents (currently none) and not the
+        // checkout controls and info.
         $body.removeClass('is_CheckingOut');
       }
     },
@@ -402,6 +429,7 @@ App.basket = (function ($) {
     setMode = function (mode) {
       if(mode === 'checkout') {
         $body.addClass('is_CheckingOut');
+
         calculateBasketTotal();
       } else {
         $body.removeClass('is_CheckingOut');
@@ -410,6 +438,9 @@ App.basket = (function ($) {
 
     /**
      * Bind Custom Events to allow Object messaging
+     * These are event listeners for custom events that act as the functional interface
+     * for the component, and allow functionality to be controlled either internally or externally
+     * in the same way.
      * @function
      */
     bindCustomMessageEvents = function () {
@@ -421,6 +452,11 @@ App.basket = (function ($) {
       $thisBasket.on('checkout', function(e) {
         e.preventDefault();
         setMode('checkout');
+      });
+
+      $thisBasket.on('payment', function(e) {
+        e.preventDefault();
+        alert('In a complete basket/checkout app you would now proceed to the payment screen, but this is the end of the process within this prototype');
       });
 
       $thisBasket.on('shop', function(e) {
@@ -448,9 +484,11 @@ App.basket = (function ($) {
       } , $thisBasket);
     };
 
-
+    /**
+     * The init function to initialise each instance of this 'class'
+     * @function
+     */
     this.init = function () {
-
       bindCustomMessageEvents();
       subscribeToEvents();
     };
@@ -504,6 +542,9 @@ App.basket = (function ($) {
 
     /**
      * Bind Custom Events to allow Object messaging
+     * These are event listeners for custom events that act as the functional interface
+     * for the component, and allow functionality to be controlled either internally or externally
+     * in the same way.
      * @function
      */
     bindCustomMessageEvents = function () {
@@ -524,12 +565,13 @@ App.basket = (function ($) {
      * @function
      */
     subscribeToEvents = function () {
-      // Subscrive to layoutchange event to trigger scroller's updateLayout method
-      // $.subscribe("currency/switched", function () {
-      //   $(this).trigger("updatePrice");
-      // } , $thisBasketItem);
+      // Not currently used, but I've left the stub here for future development
     };
 
+    /**
+     * The init function to initialise each instance of this 'class'
+     * @function
+     */
     this.init = function () {
       buildItem();
     };
@@ -577,6 +619,9 @@ App.basket = (function ($) {
 
     /**
      * Bind Custom Events to allow Object messaging
+     * These are event listeners for custom events that act as the functional interface
+     * for the component, and allow functionality to be controlled either internally or externally
+     * in the same way.
      * @function
      */
     bindCustomMessageEvents = function () {
@@ -601,6 +646,10 @@ App.basket = (function ($) {
       } , $thisCurrencySwitcher);
     };
 
+    /**
+     * The init function to initialise each instance of this 'class'
+     * @function
+     */
     this.init = function () {
       // The base element for this UI component is already on the page, so we don't need to wait until after the
       // options are added to the menu before setting up the related event listeners and message subscriptions.
@@ -608,6 +657,8 @@ App.basket = (function ($) {
       subscribeToEvents();
       buildSwitcherMenu();
 
+      // This fakes use of the Currency Switcher control and causes the App to get an initial set of
+      // exchange rates data
       $.publish('currency/switched');
     };
   },
@@ -617,21 +668,25 @@ App.basket = (function ($) {
   ///////////////
 
   /**
-   * Build a basket item based on a productID and add it to the basket
+   * Builds a basket item based on a productID and add it to the basket
    * @function
    */
   addItemToBasket = function (productID) {
+    // Create a BasketItem object (which adds itself to the basket UI)
     var newBasketItem = new BasketItem(productID).init();
+    // Publish a basket/updated message, which will initiate other basket-related functionality,
+    // such as updated the basket total
     $.publish('basket/updated');
   },
 
   /**
-   * Create delegate event listeners for this module
+   * Creates delegate event listeners for this module
    * @function
    */
   delegateEvents = function () {
     App.events.delegate("click", selBasketItemRemoveButton, "removeItem");
     App.events.delegate("click", selBasketItemCheckoutButton, "checkout");
+    App.events.delegate("click", selBasketItemPaymentButton, "payment");
     App.events.delegate("click", selBasketItemReturnLink, "shop");
     App.events.delegate("change", selBasketCurrencySwitcher, "changeCurrency");
   },
@@ -844,8 +899,6 @@ App.exchange = (function () {
    * @function
    */
   getUpdatedCurrencyRates = function () {
-
-
     // Because the currencylayer API only updates exchange rates data every hour,
     // the App caches the rates and only updates them once per hour (or however
     // long is getting in the App settings).
@@ -854,12 +907,17 @@ App.exchange = (function () {
     // check if the time since is greater than the cache period set in the App settings. If it is not
     // use the cached rates and exit this function using a return. Otherwise, set new rates with a Ajax call
     // to the currency API.
+    //
+    // Querying the currency API everytime a price/rate calculation is made can be done by changing the cache period in the settings to '0'.
+    //
     if(exchangeRates.timeStamp) {
       var rightNow = moment(),
           then = exchangeRates.timeStamp;
 
       //console.log(moment.duration(rightNow.diff(then)).asHours());
 
+      // If the time since the rates were last updated is less than the cache period (in hours), publish the 'rates/updated' message
+      // to let other objects know they can proceed with their functionality, and then break out of this function with a 'return'
       if (parseInt(moment.duration(rightNow.diff(then)).asHours()) <= App.model.getCachePeriod() ) {
         //console.log('use cached exchange rates');
         $.publish('rates/updated');
@@ -867,6 +925,7 @@ App.exchange = (function () {
       }
     }
 
+    // If a return does not happen above, update the exchange rates data by querying the API
     var newRates = App.apis.get(App.model.getAppSettings().currencyAPI.endpoint)
     .then(function(data) {
       //console.log('set new rates');
@@ -880,9 +939,9 @@ App.exchange = (function () {
    * @function
    */
   subscribeToMessages = function () {
-      // Subscrive to "currency/switched" message
-      // This will cause the exchange rates to be updated and once completeSwitch
-      // will send a "rates/updated" message causing the basket UI to update itself.
+    // Subscrive to "currency/switched" message
+    // This will cause the exchange rates to be updated and once completeSwitch
+    // will send a "rates/updated" message causing the basket UI to update itself.
     $.subscribe("currency/switched", function () {
       getUpdatedCurrencyRates();
     });
@@ -1055,7 +1114,13 @@ var App = App || {};
 
 App.productList.js
 
-This module controls the functionality and display of the app's basket component.
+This module controls the functionality and display of the app's Product List component.
+
+This is mainly done using instances of the ProductListItem, one of which controls each item
+in the list.
+
+Each of the UI sub-components is loosely coupled to the other components on the page and communication
+is generally handled using the publish/subscribe messaging system.
 
 */
 App.productList = (function ($) {
@@ -1082,7 +1147,12 @@ App.productList = (function ($) {
         productInfo,
         productListItemTemplate,
 
-
+    /**
+     * Returns an HTML template for the Product List Item
+     * This uses template literals, mainly for speed and clarity, but could also use the older string
+     * concatenation approach.
+     * @function
+     */
     buildProductListItemMarkup = function () {
       return `
       <div class="cp_ProductList__item gd_Group" data-product-id="${productInfo}">
@@ -1100,7 +1170,8 @@ App.productList = (function ($) {
     },
 
     /**
-     * Builds the item
+     * Builds the Product List Item's UI using a HTML template,
+     * and adds it to the Product List Container element
      * @function
      */
     buildProductListItem = function () {
@@ -1118,6 +1189,9 @@ App.productList = (function ($) {
 
     /**
      * Bind Custom Events to allow Object messaging
+     * These are event listeners for custom events that act as the functional interface
+     * for the component, and allow functionality to be controlled either internally or externally
+     * in the same way.
      * @function
      */
     bindCustomMessageEvents = function () {
@@ -1125,12 +1199,12 @@ App.productList = (function ($) {
         e.preventDefault();
         App.basket.addItemToBasket(thisProductID);
       });
-      //
-      // $thisBasketItem.on('removeItem', function(e) {
-      //   e.preventDefault();
-      // });
     };
 
+    /**
+     * The init function to initialise each instance of this 'class'
+     * @function
+     */
     this.init = function () {
       //console.log('ProductListItem initialised');
       buildProductListItem();

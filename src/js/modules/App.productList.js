@@ -4,7 +4,13 @@ var App = App || {};
 
 App.productList.js
 
-This module controls the functionality and display of the app's basket component.
+This module controls the functionality and display of the app's Product List component.
+
+This is mainly done using instances of the ProductListItem, one of which controls each item
+in the list.
+
+Each of the UI sub-components is loosely coupled to the other components on the page and communication
+is generally handled using the publish/subscribe messaging system.
 
 */
 App.productList = (function ($) {
@@ -31,7 +37,12 @@ App.productList = (function ($) {
         productInfo,
         productListItemTemplate,
 
-
+    /**
+     * Returns an HTML template for the Product List Item
+     * This uses template literals, mainly for speed and clarity, but could also use the older string
+     * concatenation approach.
+     * @function
+     */
     buildProductListItemMarkup = function () {
       return `
       <div class="cp_ProductList__item gd_Group" data-product-id="${productInfo}">
@@ -49,7 +60,8 @@ App.productList = (function ($) {
     },
 
     /**
-     * Builds the item
+     * Builds the Product List Item's UI using a HTML template,
+     * and adds it to the Product List Container element
      * @function
      */
     buildProductListItem = function () {
@@ -67,6 +79,9 @@ App.productList = (function ($) {
 
     /**
      * Bind Custom Events to allow Object messaging
+     * These are event listeners for custom events that act as the functional interface
+     * for the component, and allow functionality to be controlled either internally or externally
+     * in the same way.
      * @function
      */
     bindCustomMessageEvents = function () {
@@ -74,12 +89,12 @@ App.productList = (function ($) {
         e.preventDefault();
         App.basket.addItemToBasket(thisProductID);
       });
-      //
-      // $thisBasketItem.on('removeItem', function(e) {
-      //   e.preventDefault();
-      // });
     };
 
+    /**
+     * The init function to initialise each instance of this 'class'
+     * @function
+     */
     this.init = function () {
       //console.log('ProductListItem initialised');
       buildProductListItem();

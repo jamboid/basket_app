@@ -29,15 +29,20 @@ App.apis = (function($) {
         if(contentType && contentType.includes("application/json")) {
           return response.json();
         }
+        $.publish('ajax/error');
         throw new TypeError("Sorry, we haven't got JSON!");
       }
+
+      $.publish('ajax/error');
       throw Error(response.statusText);
       // Publish an error message to let the UI components know about the error
-      $.publish('ajax/error');
+
     },
 
     /**
      * This is an function to abstract a GET Ajax call to a JSON endpoint, currently using the Fetch API
+     * Future development would make this a more generic function, where the endpoint content type could be
+     * passed as a parameter.
      * @function
      */
     get = function(endpoint) {
@@ -56,7 +61,8 @@ App.apis = (function($) {
     },
 
     /**
-     * This is an function stub to abstract a POST Ajax call
+     * This is an function stub to abstract a POST Ajax call, not used in this version of the App,
+     * but could be used in the future.
      * @function
      */
     post = function(endpoint) {
@@ -64,8 +70,13 @@ App.apis = (function($) {
       return null;
     },
 
+    /**
+     * This is the initialsation function for the module
+     * @function
+     */
     init = function() {
       //console.log("App.apis initialised");
+      // Not currently used for anything, and therefore not called in App.js
     };
 
   ////////////////////////////////

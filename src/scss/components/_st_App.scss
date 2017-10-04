@@ -10,3 +10,14 @@
     justify-content:center;
   }
 }
+
+/* !== Breakpoint */
+@include mq($bpFinn) {
+  .st_App {
+    &__inner {
+      /* Extend Grid */
+      flex-direction:column;
+      align-items:center;
+    }
+  }
+}

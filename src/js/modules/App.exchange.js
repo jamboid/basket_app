@@ -76,8 +76,6 @@ App.exchange = (function () {
    * @function
    */
   getUpdatedCurrencyRates = function () {
-
-
     // Because the currencylayer API only updates exchange rates data every hour,
     // the App caches the rates and only updates them once per hour (or however
     // long is getting in the App settings).
@@ -86,12 +84,17 @@ App.exchange = (function () {
     // check if the time since is greater than the cache period set in the App settings. If it is not
     // use the cached rates and exit this function using a return. Otherwise, set new rates with a Ajax call
     // to the currency API.
+    //
+    // Querying the currency API everytime a price/rate calculation is made can be done by changing the cache period in the settings to '0'.
+    //
     if(exchangeRates.timeStamp) {
       var rightNow = moment(),
           then = exchangeRates.timeStamp;
 
       //console.log(moment.duration(rightNow.diff(then)).asHours());
 
+      // If the time since the rates were last updated is less than the cache period (in hours), publish the 'rates/updated' message
+      // to let other objects know they can proceed with their functionality, and then break out of this function with a 'return'
       if (parseInt(moment.duration(rightNow.diff(then)).asHours()) <= App.model.getCachePeriod() ) {
         //console.log('use cached exchange rates');
         $.publish('rates/updated');
@@ -99,6 +102,7 @@ App.exchange = (function () {
       }
     }
 
+    // If a return does not happen above, update the exchange rates data by querying the API
     var newRates = App.apis.get(App.model.getAppSettings().currencyAPI.endpoint)
     .then(function(data) {
       //console.log('set new rates');
@@ -112,9 +116,9 @@ App.exchange = (function () {
    * @function
    */
   subscribeToMessages = function () {
-      // Subscrive to "currency/switched" message
-      // This will cause the exchange rates to be updated and once completeSwitch
-      // will send a "rates/updated" message causing the basket UI to update itself.
+    // Subscrive to "currency/switched" message
+    // This will cause the exchange rates to be updated and once completeSwitch
+    // will send a "rates/updated" message causing the basket UI to update itself.
     $.subscribe("currency/switched", function () {
       getUpdatedCurrencyRates();
     });

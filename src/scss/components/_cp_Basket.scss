@@ -2,6 +2,7 @@
 
 .cp_Basket {
   width:400px;
+  max-width:100%;
   margin-left: 40px;
   position: relative;
   z-index: 10;
@@ -143,5 +144,13 @@
     &__checkoutToggle {
       display: none;
     }
+  }
+}
+
+
+/* !== Breakpoint */
+@include mq($bpFinn) {
+  .cp_Basket {
+    margin-left: 0;
   }
 }

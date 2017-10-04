@@ -47,3 +47,19 @@
     overflow: hidden;
   }
 }
+
+/* !== Breakpoint */
+@include mq($bpFinn) {
+  .cp_ProductList {
+    width: 100%;
+    max-width:600px;
+    margin-bottom: 40px;
+  }
+
+  .is_CheckingOut {
+    .cp_ProductList {
+      height:0px;
+      margin-bottom: 0;
+    }
+  }
+}

@@ -11,9 +11,9 @@
 "files": {
 	"\/.gitignore": {
 		"ft": 8192,
-		"oA": 2,
+		"oA": 1,
 		"oAP": "\/build\/.gitignore",
-		"oF": 0
+		"oF": 1
 		},
 	"\/build": {
 		"ft": 65536,
@@ -29,9 +29,9 @@
 		"ema": 1,
 		"eSQ": 1,
 		"ft": 4096,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/build\/README.html",
-		"oF": 0,
+		"oF": 1,
 		"oFM": 0,
 		"oS": 0,
 		"pHT": 0,
@@ -85,16 +85,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/build\/js\/modules\/min\/App.basket-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/src\/js\/modules\/App.config.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/build\/js\/modules\/min\/App.config-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -566,7 +556,7 @@
 	"displayValue": "Basket",
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-jake",
-	"lastBuiltDate": 528754798
+	"lastBuiltDate": 528851681
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

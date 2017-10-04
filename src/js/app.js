@@ -2,28 +2,6 @@
 
 // app.js
 
-/*
-
-## App Objects
-- Ajax/API Helper
-  - Abstraction to allow Ajax calls for both the product and currency lists
-  - Uses Fetch/Promise functionality
-- Basket
-  - Contains an array of products
-- Product List
-- Product
-
-4. Currency Selector
-5. Currency Convertor
-
-## App Functionality
-- App is initialised
-  - List of products is loaded via Ajax
-  -
-
-
-*/
-
 var App = {};
 
 App.init = (function ($) {
@@ -42,13 +20,15 @@ App.init = (function ($) {
     Modules.init = function () {
       // When the DOM is ready, initialise the app modules using their init() functions
       $(document).ready(function () {
-
+        // Each module is an IIFE, but each also has an init function that initiates
+        // module function only at this point, once the document is ready.
+        // In this not all the modules' init functions are called, because
+        // some are currently used for anything.
         App.events.init();
         App.apis.init();
         App.exchange.init();
         App.productList.init();
         App.basket.init();
-
       });
     };
 
